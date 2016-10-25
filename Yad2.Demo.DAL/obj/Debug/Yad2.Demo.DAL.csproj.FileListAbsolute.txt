@@ -7,3 +7,13 @@ D:\Yoav\Yad2\Yad2\Yad2.Demo.DAL\bin\Debug\EntityFramework.dll
 D:\Yoav\Yad2\Yad2\Yad2.Demo.DAL\bin\Debug\EntityFramework.SqlServer.dll
 D:\Yoav\Yad2\Yad2\Yad2.Demo.DAL\bin\Debug\EntityFramework.xml
 D:\Yoav\Yad2\Yad2\Yad2.Demo.DAL\bin\Debug\EntityFramework.SqlServer.xml
+D:\Yoav\Yad2Demo\Yad2.Demo.DAL\bin\Debug\Yad2.Demo.DAL.dll.config
+D:\Yoav\Yad2Demo\Yad2.Demo.DAL\bin\Debug\Yad2.Demo.DAL.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.DAL\bin\Debug\Yad2.Demo.DAL.pdb
+D:\Yoav\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.SqlServer.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.xml
+D:\Yoav\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.SqlServer.xml
+D:\Yoav\Yad2Demo\Yad2.Demo.DAL\obj\Debug\Yad2.Demo.DAL.csprojResolveAssemblyReference.cache
+D:\Yoav\Yad2Demo\Yad2.Demo.DAL\obj\Debug\Yad2.Demo.DAL.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.DAL\obj\Debug\Yad2.Demo.DAL.pdb

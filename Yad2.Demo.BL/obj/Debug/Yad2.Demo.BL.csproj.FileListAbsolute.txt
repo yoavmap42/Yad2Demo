@@ -10,3 +10,15 @@ D:\Yoav\Yad2\Yad2\Yad2.Demo.BL\bin\Debug\EntityFramework.xml
 D:\Yoav\Yad2\Yad2\Yad2.Demo.BL\bin\Debug\Yad2.Demo.BL.dll.config
 D:\Yoav\Yad2\Yad2\Yad2.Demo.BL\bin\Debug\EntityFramework.SqlServer.dll
 D:\Yoav\Yad2\Yad2\Yad2.Demo.BL\bin\Debug\EntityFramework.SqlServer.xml
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\bin\Debug\Yad2.Demo.BL.dll.config
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\bin\Debug\Yad2.Demo.BL.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\bin\Debug\Yad2.Demo.BL.pdb
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\bin\Debug\EntityFramework.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\bin\Debug\EntityFramework.SqlServer.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\bin\Debug\Yad2.Demo.DAL.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\bin\Debug\Yad2.Demo.DAL.pdb
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\bin\Debug\EntityFramework.xml
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\bin\Debug\EntityFramework.SqlServer.xml
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\obj\Debug\Yad2.Demo.BL.csprojResolveAssemblyReference.cache
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\obj\Debug\Yad2.Demo.BL.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.BL\obj\Debug\Yad2.Demo.BL.pdb
