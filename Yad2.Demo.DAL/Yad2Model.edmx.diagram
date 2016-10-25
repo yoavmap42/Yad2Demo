@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2f85c3fbb5c144c39eb5b66c462990b7" Name="Diagram1" ZoomLevel="66">
+        <EntityTypeShape EntityType="Yad2Model.iGoCity" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.iGoStreet" Width="1.5" PointX="3" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.MapaCity" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.MapaStreet" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.MapiCity" Width="1.5" PointX="3" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.MapiStreet" Width="1.5" PointX="3" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.Restaurants" Width="1.5" PointX="5.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.Schools" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.Yad2_TA_BuildingPoints_Updated" Width="1.5" PointX="13.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.Yad2Area" Width="1.5" PointX="3" PointY="19.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.Yad2City" Width="1.5" PointX="3" PointY="21.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.Yad2Street" Width="1.5" PointX="5.25" PointY="21.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Yad2Model.AddressMaster" Width="1.5" PointX="5.25" PointY="3" IsExpanded="true" />
+        <AssociationConnector Association="Yad2Model.FK_AddressMaster_iGoCity" ManuallyRouted="false" />
+        <AssociationConnector Association="Yad2Model.FK_AddressMaster_iGoStreet" ManuallyRouted="false" />
+        <AssociationConnector Association="Yad2Model.FK_AddressMaster_MapaCity" ManuallyRouted="false" />
+        <AssociationConnector Association="Yad2Model.FK_MapaStreet_MapaCity" ManuallyRouted="false" />
+        <AssociationConnector Association="Yad2Model.FK_AddressMaster_MapaStreet" ManuallyRouted="false" />
+        <AssociationConnector Association="Yad2Model.FK_AddressMaster_MapiCity" ManuallyRouted="false" />
+        <AssociationConnector Association="Yad2Model.FK_MapiStreet_MapiCity" ManuallyRouted="false" />
+        <AssociationConnector Association="Yad2Model.FK_AddressMaster_MapiStreet" ManuallyRouted="false" />
+        <AssociationConnector Association="Yad2Model.FK_AddressMaster_Yad2Area" ManuallyRouted="false" />
+        <AssociationConnector Association="Yad2Model.FK_AddressMaster_Yad2City" ManuallyRouted="false" />
+        <AssociationConnector Association="Yad2Model.FK_Yad2Street_Yad2City" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Yad2Model.Areas" Width="1.5" PointX="16.375" PointY="4.5" />
+        <EntityTypeShape EntityType="Yad2Model.Listings" Width="1.5" PointX="23.125" PointY="5.875" />
+        <EntityTypeShape EntityType="Yad2Model.Municipalities" Width="1.5" PointX="18.625" PointY="4.125" />
+        <EntityTypeShape EntityType="Yad2Model.Neighborhoods" Width="1.5" PointX="20.875" PointY="6" />
+        <EntityTypeShape EntityType="Yad2Model.Streets" Width="1.5" PointX="20.875" PointY="10.25" />
+        <AssociationConnector Association="Yad2Model.FK_Municipalities_Areas" />
+        <AssociationConnector Association="Yad2Model.FK_Listings_Municipalities" />
+        <AssociationConnector Association="Yad2Model.FK_Listings_Neighborhoods" />
+        <AssociationConnector Association="Yad2Model.FK_Listings_Streets" />
+        <AssociationConnector Association="Yad2Model.FK_Streets_Municipalities" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

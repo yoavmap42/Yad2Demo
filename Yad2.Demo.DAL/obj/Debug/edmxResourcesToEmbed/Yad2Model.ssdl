@@ -1,0 +1,544 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Yad2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="AddressMaster">
+    <Key>
+      <PropertyRef Name="AddressMasterID" />
+    </Key>
+    <Property Name="AddressMasterID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MapaCityCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="MapaStreetCode" Type="int" />
+    <Property Name="HouseNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="iGoCityCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="iGoStreetCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Entrance" Type="nvarchar" MaxLength="50" />
+    <Property Name="MapiCityCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="MapiStreetCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="MapiBuildingID" Type="nvarchar" MaxLength="50" />
+    <Property Name="Yad2CityCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Yad2StreetCode" Type="int" />
+    <Property Name="Yad2AreaCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Shchuna" Type="nvarchar" MaxLength="400" />
+    <Property Name="LamasStat" Type="nvarchar" MaxLength="20" />
+    <Property Name="MapiBuildingCenterX" Type="nvarchar" MaxLength="20" />
+    <Property Name="MapiBuildingCenterY" Type="nvarchar" MaxLength="20" />
+    <Property Name="verticalX" Type="nvarchar" MaxLength="50" />
+    <Property Name="verticalY" Type="nvarchar" MaxLength="50" />
+    <Property Name="Gush" Type="nvarchar" MaxLength="20" />
+    <Property Name="Chelka" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="Areas">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="AreaName" Type="varchar" MaxLength="40" />
+    <Property Name="AreaNameENG" Type="varchar" MaxLength="80" />
+    <Property Name="Longitude" Type="float" />
+    <Property Name="Latitude" Type="float" />
+    <Property Name="SP_GEOMETRY" Type="geometry" />
+  </EntityType>
+  <EntityType Name="iGoCity">
+    <Key>
+      <PropertyRef Name="iGoCityCode" />
+    </Key>
+    <Property Name="iGoCityCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="iGoCityName" Type="nvarchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="iGoStreet">
+    <Key>
+      <PropertyRef Name="iGoStreetCodeID" />
+    </Key>
+    <Property Name="iGoStreetCodeID" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="iGoStreetCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="iGoStreetName" Type="nvarchar" MaxLength="200" />
+    <Property Name="iGoCityCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="iGoCityName" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Listings">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Address" Type="varchar" MaxLength="100" />
+    <Property Name="StreetName" Type="varchar" MaxLength="23" />
+    <Property Name="StreetID" Type="int" />
+    <Property Name="HouseNumber" Type="smallint" />
+    <Property Name="City" Type="varchar" MaxLength="100" />
+    <Property Name="CityCode" Type="varchar" MaxLength="14" />
+    <Property Name="Price" Type="int" />
+    <Property Name="Shchuna" Type="varchar" MaxLength="100" />
+    <Property Name="ShchunaID" Type="int" />
+    <Property Name="IsSold" Type="int" />
+    <Property Name="IsFromAgent" Type="int" />
+    <Property Name="IsFirstHand" Type="int" />
+    <Property Name="PicRef" Type="int" />
+    <Property Name="Rooms" Type="int" />
+    <Property Name="SqMeter" Type="decimal" Precision="9" Scale="2" />
+    <Property Name="X" Type="float" />
+    <Property Name="Y" Type="float" />
+    <Property Name="SP_GEOMETRY" Type="geometry" />
+  </EntityType>
+  <EntityType Name="MapaCity">
+    <Key>
+      <PropertyRef Name="MapaCityCode" />
+    </Key>
+    <Property Name="MapaCityCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="MapaCityName" Type="nvarchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MapaStreet">
+    <Key>
+      <PropertyRef Name="MapaStreetID" />
+    </Key>
+    <Property Name="MapaStreetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MapaStreetCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="MapaStreetName" Type="nvarchar" MaxLength="200" />
+    <Property Name="MapaCityCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="MaxHouseNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="MapaCityName" Type="nvarchar" MaxLength="75" />
+  </EntityType>
+  <EntityType Name="MapiCity">
+    <Key>
+      <PropertyRef Name="MapiCityCode" />
+    </Key>
+    <Property Name="MapiCityCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="MapiCityName" Type="nvarchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MapiStreet">
+    <Key>
+      <PropertyRef Name="MapiStreetCode" />
+    </Key>
+    <Property Name="MapiStreetCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="MapiStreetName" Type="nvarchar" MaxLength="200" />
+    <Property Name="MapiCityCode" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Municipalities">
+    <Key>
+      <PropertyRef Name="MunicipalCode" />
+    </Key>
+    <Property Name="MunicipalName" Type="varchar" MaxLength="40" />
+    <Property Name="MunicipalCode" Type="varchar" MaxLength="14" Nullable="false" />
+    <Property Name="MunicipalNameENG" Type="varchar" MaxLength="80" />
+    <Property Name="AreaName" Type="varchar" MaxLength="40" />
+    <Property Name="AreaID" Type="int" />
+    <Property Name="Longitude" Type="float" />
+    <Property Name="Latitude" Type="float" />
+    <Property Name="SP_GEOMETRY" Type="geometry" />
+  </EntityType>
+  <EntityType Name="Neighborhoods">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="NAME1" Type="varchar" MaxLength="50" />
+    <Property Name="NAME2" Type="varchar" MaxLength="50" />
+    <Property Name="ALT_NAME1" Type="varchar" MaxLength="50" />
+    <Property Name="ALT_NAME2" Type="varchar" MaxLength="50" />
+    <Property Name="City_Name" Type="varchar" MaxLength="254" />
+    <Property Name="City_Code" Type="varchar" MaxLength="254" />
+    <Property Name="Longitude" Type="float" />
+    <Property Name="Latitude" Type="float" />
+    <Property Name="SP_GEOMETRY" Type="geometry" />
+  </EntityType>
+  <EntityType Name="Restaurants">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="100" />
+    <Property Name="Type" Type="varchar" MaxLength="100" />
+    <Property Name="Longitude" Type="float" />
+    <Property Name="Latitude" Type="float" />
+    <Property Name="SP_GEOMETRY" Type="geometry" />
+  </EntityType>
+  <EntityType Name="Schools">
+    <Key>
+      <PropertyRef Name="objid" />
+    </Key>
+    <Property Name="objid" Type="smallint" Nullable="false" />
+    <Property Name="institutename" Type="varchar" MaxLength="39" />
+    <Property Name="SchoolRank" Type="int" />
+    <Property Name="cityname" Type="varchar" MaxLength="11" />
+    <Property Name="CityCode" Type="int" />
+    <Property Name="Shchuna" Type="varchar" MaxLength="100" />
+    <Property Name="ShchunaID" Type="int" />
+    <Property Name="X" Type="float" />
+    <Property Name="Y" Type="float" />
+    <Property Name="SP_GEOMETRY" Type="geometry" />
+  </EntityType>
+  <EntityType Name="Streets">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Street" Type="varchar" MaxLength="60" />
+    <Property Name="CityName" Type="varchar" MaxLength="31" />
+    <Property Name="CityCode" Type="varchar" MaxLength="14" />
+    <Property Name="X" Type="decimal" Precision="9" Scale="6" />
+    <Property Name="Y" Type="decimal" Precision="9" Scale="6" />
+    <Property Name="SP_GEOMETRY" Type="geometry" />
+  </EntityType>
+  <EntityType Name="Yad2_TA_BuildingPoints_Updated">
+    <Key>
+      <PropertyRef Name="MI_PRINX" />
+    </Key>
+    <Property Name="MapiStreetCode1" Type="varchar" MaxLength="30" />
+    <Property Name="MapiStreetCode2" Type="varchar" MaxLength="30" />
+    <Property Name="STR_NAME1" Type="varchar" MaxLength="21" />
+    <Property Name="HOUSE_NO" Type="smallint" />
+    <Property Name="ENTRY" Type="varchar" MaxLength="1" />
+    <Property Name="LOCALITY_I" Type="smallint" />
+    <Property Name="LOCALITY_N" Type="varchar" MaxLength="12" />
+    <Property Name="ID" Type="int" />
+    <Property Name="address1" Type="nvarchar" MaxLength="50" />
+    <Property Name="house_num_1" Type="smallint" />
+    <Property Name="house_num_1_2" Type="smallint" />
+    <Property Name="house_num_1_3" Type="smallint" />
+    <Property Name="house_num_1_4" Type="smallint" />
+    <Property Name="house_num_1_5" Type="smallint" />
+    <Property Name="house_num_1_6" Type="smallint" />
+    <Property Name="address2" Type="nvarchar" MaxLength="50" />
+    <Property Name="house_num_2" Type="smallint" />
+    <Property Name="house_num_2_2" Type="smallint" />
+    <Property Name="house_num_2_3" Type="smallint" />
+    <Property Name="house_num_2_4" Type="smallint" />
+    <Property Name="house_num_2_5" Type="smallint" />
+    <Property Name="house_num_2_6" Type="smallint" />
+    <Property Name="Longitude" Type="float" />
+    <Property Name="Latitude" Type="float" />
+    <Property Name="ID_2" Type="smallint" />
+    <Property Name="City_Code" Type="smallint" />
+    <Property Name="NAME1" Type="varchar" MaxLength="15" />
+    <Property Name="NAME2" Type="varchar" MaxLength="11" />
+    <Property Name="Building_X" Type="decimal" Precision="18" Scale="6" />
+    <Property Name="Building_Y" Type="decimal" Precision="18" Scale="6" />
+    <Property Name="StreetView_X" Type="decimal" Precision="18" Scale="6" />
+    <Property Name="StreetView_Y" Type="decimal" Precision="18" Scale="6" />
+    <Property Name="MI_PRINX" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Yad2Area">
+    <Key>
+      <PropertyRef Name="Yad2AreaCode" />
+    </Key>
+    <Property Name="Yad2AreaCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Yad2AreaName" Type="nvarchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Yad2City">
+    <Key>
+      <PropertyRef Name="Yad2CityCode" />
+    </Key>
+    <Property Name="Yad2CityCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Yad2CityName" Type="nvarchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Yad2Street">
+    <Key>
+      <PropertyRef Name="Yad2StreetID" />
+    </Key>
+    <Property Name="Yad2StreetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Yad2StreetCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Yad2StreetName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Yad2CityCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Yad2CityName" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <Association Name="FK_AddressMaster_iGoCity">
+    <End Role="iGoCity" Type="Self.iGoCity" Multiplicity="0..1" />
+    <End Role="AddressMaster" Type="Self.AddressMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="iGoCity">
+        <PropertyRef Name="iGoCityCode" />
+      </Principal>
+      <Dependent Role="AddressMaster">
+        <PropertyRef Name="iGoCityCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AddressMaster_iGoStreet">
+    <End Role="iGoStreet" Type="Self.iGoStreet" Multiplicity="0..1" />
+    <End Role="AddressMaster" Type="Self.AddressMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="iGoStreet">
+        <PropertyRef Name="iGoStreetCodeID" />
+      </Principal>
+      <Dependent Role="AddressMaster">
+        <PropertyRef Name="iGoStreetCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AddressMaster_MapaCity">
+    <End Role="MapaCity" Type="Self.MapaCity" Multiplicity="0..1" />
+    <End Role="AddressMaster" Type="Self.AddressMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MapaCity">
+        <PropertyRef Name="MapaCityCode" />
+      </Principal>
+      <Dependent Role="AddressMaster">
+        <PropertyRef Name="MapaCityCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AddressMaster_MapaStreet">
+    <End Role="MapaStreet" Type="Self.MapaStreet" Multiplicity="0..1" />
+    <End Role="AddressMaster" Type="Self.AddressMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MapaStreet">
+        <PropertyRef Name="MapaStreetID" />
+      </Principal>
+      <Dependent Role="AddressMaster">
+        <PropertyRef Name="MapaStreetCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AddressMaster_MapiCity">
+    <End Role="MapiCity" Type="Self.MapiCity" Multiplicity="0..1" />
+    <End Role="AddressMaster" Type="Self.AddressMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MapiCity">
+        <PropertyRef Name="MapiCityCode" />
+      </Principal>
+      <Dependent Role="AddressMaster">
+        <PropertyRef Name="MapiCityCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AddressMaster_MapiStreet">
+    <End Role="MapiStreet" Type="Self.MapiStreet" Multiplicity="0..1" />
+    <End Role="AddressMaster" Type="Self.AddressMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MapiStreet">
+        <PropertyRef Name="MapiStreetCode" />
+      </Principal>
+      <Dependent Role="AddressMaster">
+        <PropertyRef Name="MapiStreetCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AddressMaster_Yad2Area">
+    <End Role="Yad2Area" Type="Self.Yad2Area" Multiplicity="0..1" />
+    <End Role="AddressMaster" Type="Self.AddressMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Yad2Area">
+        <PropertyRef Name="Yad2AreaCode" />
+      </Principal>
+      <Dependent Role="AddressMaster">
+        <PropertyRef Name="Yad2AreaCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AddressMaster_Yad2City">
+    <End Role="Yad2City" Type="Self.Yad2City" Multiplicity="0..1" />
+    <End Role="AddressMaster" Type="Self.AddressMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Yad2City">
+        <PropertyRef Name="Yad2CityCode" />
+      </Principal>
+      <Dependent Role="AddressMaster">
+        <PropertyRef Name="Yad2CityCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Listings_Municipalities">
+    <End Role="Municipalities" Type="Self.Municipalities" Multiplicity="0..1" />
+    <End Role="Listings" Type="Self.Listings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Municipalities">
+        <PropertyRef Name="MunicipalCode" />
+      </Principal>
+      <Dependent Role="Listings">
+        <PropertyRef Name="CityCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Listings_Neighborhoods">
+    <End Role="Neighborhoods" Type="Self.Neighborhoods" Multiplicity="0..1" />
+    <End Role="Listings" Type="Self.Listings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Neighborhoods">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Listings">
+        <PropertyRef Name="ShchunaID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Listings_Streets">
+    <End Role="Streets" Type="Self.Streets" Multiplicity="0..1" />
+    <End Role="Listings" Type="Self.Listings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Streets">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Listings">
+        <PropertyRef Name="StreetID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MapaStreet_MapaCity">
+    <End Role="MapaCity" Type="Self.MapaCity" Multiplicity="0..1" />
+    <End Role="MapaStreet" Type="Self.MapaStreet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MapaCity">
+        <PropertyRef Name="MapaCityCode" />
+      </Principal>
+      <Dependent Role="MapaStreet">
+        <PropertyRef Name="MapaCityCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MapiStreet_MapiCity">
+    <End Role="MapiCity" Type="Self.MapiCity" Multiplicity="0..1" />
+    <End Role="MapiStreet" Type="Self.MapiStreet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MapiCity">
+        <PropertyRef Name="MapiCityCode" />
+      </Principal>
+      <Dependent Role="MapiStreet">
+        <PropertyRef Name="MapiCityCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Municipalities_Areas">
+    <End Role="Areas" Type="Self.Areas" Multiplicity="0..1" />
+    <End Role="Municipalities" Type="Self.Municipalities" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Areas">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Municipalities">
+        <PropertyRef Name="AreaID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Streets_Municipalities">
+    <End Role="Municipalities" Type="Self.Municipalities" Multiplicity="0..1" />
+    <End Role="Streets" Type="Self.Streets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Municipalities">
+        <PropertyRef Name="MunicipalCode" />
+      </Principal>
+      <Dependent Role="Streets">
+        <PropertyRef Name="CityCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Yad2Street_Yad2City">
+    <End Role="Yad2City" Type="Self.Yad2City" Multiplicity="1" />
+    <End Role="Yad2Street" Type="Self.Yad2Street" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Yad2City">
+        <PropertyRef Name="Yad2CityCode" />
+      </Principal>
+      <Dependent Role="Yad2Street">
+        <PropertyRef Name="Yad2CityCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Yad2ModelStoreContainer">
+    <EntitySet Name="Areas" EntityType="Self.Areas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="iGoCity" EntityType="Self.iGoCity" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="iGoStreet" EntityType="Self.iGoStreet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Listings" EntityType="Self.Listings" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MapaCity" EntityType="Self.MapaCity" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MapaStreet" EntityType="Self.MapaStreet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MapiCity" EntityType="Self.MapiCity" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MapiStreet" EntityType="Self.MapiStreet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Municipalities" EntityType="Self.Municipalities" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Neighborhoods" EntityType="Self.Neighborhoods" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Restaurants" EntityType="Self.Restaurants" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Schools" EntityType="Self.Schools" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Streets" EntityType="Self.Streets" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Yad2_TA_BuildingPoints_Updated" EntityType="Self.Yad2_TA_BuildingPoints_Updated" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Yad2Area" EntityType="Self.Yad2Area" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Yad2City" EntityType="Self.Yad2City" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Yad2Street" EntityType="Self.Yad2Street" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AddressMaster" EntityType="Self.AddressMaster" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [AddressMaster].[AddressMasterID] AS [AddressMasterID], 
+    [AddressMaster].[MapaCityCode] AS [MapaCityCode], 
+    [AddressMaster].[MapaStreetCode] AS [MapaStreetCode], 
+    [AddressMaster].[HouseNumber] AS [HouseNumber], 
+    [AddressMaster].[iGoCityCode] AS [iGoCityCode], 
+    [AddressMaster].[iGoStreetCode] AS [iGoStreetCode], 
+    [AddressMaster].[Entrance] AS [Entrance], 
+    [AddressMaster].[MapiCityCode] AS [MapiCityCode], 
+    [AddressMaster].[MapiStreetCode] AS [MapiStreetCode], 
+    [AddressMaster].[MapiBuildingID] AS [MapiBuildingID], 
+    [AddressMaster].[Yad2CityCode] AS [Yad2CityCode], 
+    [AddressMaster].[Yad2StreetCode] AS [Yad2StreetCode], 
+    [AddressMaster].[Yad2AreaCode] AS [Yad2AreaCode], 
+    [AddressMaster].[Shchuna] AS [Shchuna], 
+    [AddressMaster].[LamasStat] AS [LamasStat], 
+    [AddressMaster].[MapiBuildingCenterX] AS [MapiBuildingCenterX], 
+    [AddressMaster].[MapiBuildingCenterY] AS [MapiBuildingCenterY], 
+    [AddressMaster].[verticalX] AS [verticalX], 
+    [AddressMaster].[verticalY] AS [verticalY], 
+    [AddressMaster].[Gush] AS [Gush], 
+    [AddressMaster].[Chelka] AS [Chelka]
+    FROM [dbo].[AddressMaster] AS [AddressMaster]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_AddressMaster_iGoCity" Association="Self.FK_AddressMaster_iGoCity">
+      <End Role="iGoCity" EntitySet="iGoCity" />
+      <End Role="AddressMaster" EntitySet="AddressMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AddressMaster_iGoStreet" Association="Self.FK_AddressMaster_iGoStreet">
+      <End Role="iGoStreet" EntitySet="iGoStreet" />
+      <End Role="AddressMaster" EntitySet="AddressMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AddressMaster_MapaCity" Association="Self.FK_AddressMaster_MapaCity">
+      <End Role="MapaCity" EntitySet="MapaCity" />
+      <End Role="AddressMaster" EntitySet="AddressMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AddressMaster_MapaStreet" Association="Self.FK_AddressMaster_MapaStreet">
+      <End Role="MapaStreet" EntitySet="MapaStreet" />
+      <End Role="AddressMaster" EntitySet="AddressMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AddressMaster_MapiCity" Association="Self.FK_AddressMaster_MapiCity">
+      <End Role="MapiCity" EntitySet="MapiCity" />
+      <End Role="AddressMaster" EntitySet="AddressMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AddressMaster_MapiStreet" Association="Self.FK_AddressMaster_MapiStreet">
+      <End Role="MapiStreet" EntitySet="MapiStreet" />
+      <End Role="AddressMaster" EntitySet="AddressMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AddressMaster_Yad2Area" Association="Self.FK_AddressMaster_Yad2Area">
+      <End Role="Yad2Area" EntitySet="Yad2Area" />
+      <End Role="AddressMaster" EntitySet="AddressMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AddressMaster_Yad2City" Association="Self.FK_AddressMaster_Yad2City">
+      <End Role="Yad2City" EntitySet="Yad2City" />
+      <End Role="AddressMaster" EntitySet="AddressMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Listings_Municipalities" Association="Self.FK_Listings_Municipalities">
+      <End Role="Municipalities" EntitySet="Municipalities" />
+      <End Role="Listings" EntitySet="Listings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Listings_Neighborhoods" Association="Self.FK_Listings_Neighborhoods">
+      <End Role="Neighborhoods" EntitySet="Neighborhoods" />
+      <End Role="Listings" EntitySet="Listings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Listings_Streets" Association="Self.FK_Listings_Streets">
+      <End Role="Streets" EntitySet="Streets" />
+      <End Role="Listings" EntitySet="Listings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MapaStreet_MapaCity" Association="Self.FK_MapaStreet_MapaCity">
+      <End Role="MapaCity" EntitySet="MapaCity" />
+      <End Role="MapaStreet" EntitySet="MapaStreet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MapiStreet_MapiCity" Association="Self.FK_MapiStreet_MapiCity">
+      <End Role="MapiCity" EntitySet="MapiCity" />
+      <End Role="MapiStreet" EntitySet="MapiStreet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Municipalities_Areas" Association="Self.FK_Municipalities_Areas">
+      <End Role="Areas" EntitySet="Areas" />
+      <End Role="Municipalities" EntitySet="Municipalities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Streets_Municipalities" Association="Self.FK_Streets_Municipalities">
+      <End Role="Municipalities" EntitySet="Municipalities" />
+      <End Role="Streets" EntitySet="Streets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Yad2Street_Yad2City" Association="Self.FK_Yad2Street_Yad2City">
+      <End Role="Yad2City" EntitySet="Yad2City" />
+      <End Role="Yad2Street" EntitySet="Yad2Street" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yad2.Demo.DAL", "Yad2.Demo.DAL\Yad2.Demo.DAL.csproj", "{247DB935-5B21-46E0-9A8C-FACE7DA53B60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yad2.Demo.BL", "Yad2.Demo.BL\Yad2.Demo.BL.csproj", "{30376B62-E5D0-4360-B372-BD90A219CE4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yad2.Demo.UI", "Yad2.Demo.UI\Yad2.Demo.UI.csproj", "{BE835F87-A554-4A5B-8EC9-B8FB118CD22B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{247DB935-5B21-46E0-9A8C-FACE7DA53B60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{247DB935-5B21-46E0-9A8C-FACE7DA53B60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{247DB935-5B21-46E0-9A8C-FACE7DA53B60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{247DB935-5B21-46E0-9A8C-FACE7DA53B60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30376B62-E5D0-4360-B372-BD90A219CE4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30376B62-E5D0-4360-B372-BD90A219CE4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30376B62-E5D0-4360-B372-BD90A219CE4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30376B62-E5D0-4360-B372-BD90A219CE4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE835F87-A554-4A5B-8EC9-B8FB118CD22B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE835F87-A554-4A5B-8EC9-B8FB118CD22B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE835F87-A554-4A5B-8EC9-B8FB118CD22B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE835F87-A554-4A5B-8EC9-B8FB118CD22B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
