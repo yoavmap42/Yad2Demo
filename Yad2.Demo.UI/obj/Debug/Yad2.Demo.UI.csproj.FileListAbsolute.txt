@@ -132,3 +132,15 @@ D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\System.Web.Http.Owin.xml
 D:\Yoav\Yad2Demo\Yad2.Demo.UI\obj\Debug\Yad2.Demo.UI.csprojResolveAssemblyReference.cache
 D:\Yoav\Yad2Demo\Yad2.Demo.UI\obj\Debug\Yad2.Demo.UI.dll
 D:\Yoav\Yad2Demo\Yad2.Demo.UI\obj\Debug\Yad2.Demo.UI.pdb
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\Microsoft.Practices.ServiceLocation.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\Microsoft.Practices.Unity.Configuration.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\Microsoft.Practices.Unity.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\Microsoft.Practices.Unity.RegistrationByConvention.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\Unity.WebApi.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\Microsoft.Practices.ServiceLocation.pdb
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\Microsoft.Practices.ServiceLocation.xml
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\Microsoft.Practices.Unity.xml
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\Microsoft.Practices.Unity.Configuration.xml
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\Microsoft.Practices.Unity.RegistrationByConvention.xml
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\System.Spatial.dll
+D:\Yoav\Yad2Demo\Yad2.Demo.UI\bin\System.Spatial.xml
