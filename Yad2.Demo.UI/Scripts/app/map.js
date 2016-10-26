@@ -21,17 +21,17 @@ var createPointStyleFunction = function () {
                     color: feature.borderColor != null ? feature.borderColor : '#FFF',
                     width: feature.borderWidth != null ? feature.borderWidth : 2
                 })
+            }),
+            text: new ol.style.Text({
+                text: feature.name,
+                font: '10px Arial',
+                fill: new ol.style.Fill({ color: feature.labelColor != null ? feature.labelColor : '#ff0f0f' }),
+                stroke: new ol.style.Stroke({
+                    color: feature.labelBorderColor != null ? feature.labelBorderColor : '#fff',
+                    width: feature.labelBorderWidth != null ? feature.labelBorderWidth : 2
+                }),
+                offsetY: -5
             })
-            //text: new ol.style.Text({
-            //    text: feature.name,
-            //    font: 'Bold 12px Arial',
-            //    fill: new ol.style.Fill({ color: feature.labelColor != null ? feature.labelColor : '#000' }),
-            //    stroke: new ol.style.Stroke({
-            //        color: feature.labelBorderColor != null ? feature.labelBorderColor : '#fff',
-            //        width: feature.labelBorderWidth != null ? feature.labelBorderWidth : 1
-            //    }),
-            //    offsetY: -15
-           // })
         });
         return [style];
     };
