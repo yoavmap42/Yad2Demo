@@ -36,6 +36,16 @@ namespace Yad2.Demo.BL
             return _db.Municipalities.SingleOrDefault(x => x.MunicipalCode == code);
         }
 
+        public IEnumerable<Neighborhoods> GetNeighborhoodsByCity(string city)
+        {
+            return _db.Neighborhoods.Where(x => x.City_Code == city);
+        }
+
+        public IEnumerable<Listings> GetListingsByNeighborhood(int nid)
+        {
+            return _db.Listings.Where(x => x.ShchunaID == nid);
+        }
+
         public MapManager()
         {
             _db = new Yad2Entities();

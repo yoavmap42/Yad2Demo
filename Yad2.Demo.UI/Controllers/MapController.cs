@@ -34,6 +34,66 @@ namespace Yad2.Demo.UI.Controllers
             return response;
         }
 
+        [Route("GetCitiesByArea")]
+        public HttpResponseMessage GetCitiesByArea(int area)
+        {
+            var response = new HttpResponseMessage();
+            List<PolyLayerViewModel> cities;
+            try
+            {
+                cities = _mapService.GetCitiesByArea(area);
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.Content = new ObjectContent<string>(e.Message, new JsonMediaTypeFormatter());
+                return response;
+            }
+            response.StatusCode = HttpStatusCode.OK;
+            response.Content = new ObjectContent<List<PolyLayerViewModel>>(cities, new JsonMediaTypeFormatter());
+            return response;
+        }
+
+        [Route("GetNeighborhoodsByCity")]
+        public HttpResponseMessage GetNeighborhoodsByCity(string city)
+        {
+            var response = new HttpResponseMessage();
+            List<PolyLayerViewModel> neighborhoods;
+            try
+            {
+                neighborhoods = _mapService.GetNeighborhoodsByCity(city);
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.Content = new ObjectContent<string>(e.Message, new JsonMediaTypeFormatter());
+                return response;
+            }
+            response.StatusCode = HttpStatusCode.OK;
+            response.Content = new ObjectContent<List<PolyLayerViewModel>>(neighborhoods, new JsonMediaTypeFormatter());
+            return response;
+        }
+
+        [Route("GetAdsByNeighborhood")]
+        public HttpResponseMessage GetAdsByNeighborhood(int nid)
+        {
+            var response = new HttpResponseMessage();
+            List<PolyLayerViewModel> ads;
+            try
+            {
+                ads = _mapService.GetAdsByNeighborhood(nid);
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.Content = new ObjectContent<string>(e.Message, new JsonMediaTypeFormatter());
+                return response;
+            }
+            response.StatusCode = HttpStatusCode.OK;
+            response.Content = new ObjectContent<List<PolyLayerViewModel>>(ads, new JsonMediaTypeFormatter());
+            return response;
+        }
+
         [Route("GetCities")]
         public HttpResponseMessage GetCities()
         {

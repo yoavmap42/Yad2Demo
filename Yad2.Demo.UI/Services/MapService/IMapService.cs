@@ -12,5 +12,11 @@ namespace Yad2.Demo.UI.Services.MapService
 
 
         List<PolyLayerViewModel> GetCities();
+
+        List<PolyLayerViewModel> GetCitiesByArea(int area);
+
+        List<PolyLayerViewModel> GetNeighborhoodsByCity(string city);
+
+        List<PolyLayerViewModel> GetAdsByNeighborhood(int nid);
     }
 }

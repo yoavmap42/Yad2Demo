@@ -4,6 +4,8 @@
 
 var regionSource = new ol.source.Vector();
 var citySource = new ol.source.Vector();
+var neighborhoodSource = new ol.source.Vector();
+var adSource = new ol.source.Vector();
 
 var layerSwitcher = new ol.control.LayerSwitcher({
     tipLabel: 'שכבות'
@@ -13,30 +15,30 @@ var createPointStyleFunction = function () {
     return function (feature) {
         var style = new ol.style.Style({
             image: new ol.style.Circle({
-                radius: 10,
-                fill: new ol.style.Fill({ color: feature.bgColor != null ? feature.bgColor : '#FF2266' }),
+                radius: 5,
+                fill: new ol.style.Fill({ color: feature.bgColor != null ? feature.bgColor : '#FF0000' }),
                 stroke: new ol.style.Stroke({
-                    color: feature.borderColor != null ? feature.borderColor : '#FFC1C1',
+                    color: feature.borderColor != null ? feature.borderColor : '#FFF',
                     width: feature.borderWidth != null ? feature.borderWidth : 2
                 })
-            }),
-            text: new ol.style.Text({
-                text: feature.name,
-                font: 'Bold 12px Arial',
-                fill: new ol.style.Fill({ color: feature.labelColor != null ? feature.labelColor : '#000' }),
-                stroke: new ol.style.Stroke({
-                    color: feature.labelBorderColor != null ? feature.labelBorderColor : '#fff',
-                    width: feature.labelBorderWidth != null ? feature.labelBorderWidth : 1
-                }),
-                offsetY: -15
             })
+            //text: new ol.style.Text({
+            //    text: feature.name,
+            //    font: 'Bold 12px Arial',
+            //    fill: new ol.style.Fill({ color: feature.labelColor != null ? feature.labelColor : '#000' }),
+            //    stroke: new ol.style.Stroke({
+            //        color: feature.labelBorderColor != null ? feature.labelBorderColor : '#fff',
+            //        width: feature.labelBorderWidth != null ? feature.labelBorderWidth : 1
+            //    }),
+            //    offsetY: -15
+           // })
         });
         return [style];
     };
 };
 
 
-var createPolyStyleFunction = function () {
+var createPolyStyleFunction = function (font) {
     return function (feature) {
         var style = new ol.style.Style({
             fill: new ol.style.Fill({
@@ -48,7 +50,7 @@ var createPolyStyleFunction = function () {
             }),
             text: new ol.style.Text({
                 text: feature.name,
-                font: 'Bold 24px Arial',
+                font: 'Bold '+ font +'px Arial',
                 fill: new ol.style.Fill({ color: feature.labelColor != null ? feature.labelColor : '#000' }),
                 stroke: new ol.style.Stroke({
                     color: feature.labelBorderColor != null ? feature.labelBorderColor : '#000',
@@ -67,11 +69,13 @@ var createPolyStyleFunction = function () {
     };
 };
 
+var emptyImgStyle = new ol.style.Style({ image: '' });
+
 var createPolySelectedStyleFunction = function () {
     return function (feature) {
         var style = new ol.style.Style({
             fill: new ol.style.Fill({
-                color: 'rgba(256, 128, 128, 0.2)'
+                color: 'rgba(256, 256, 256, 0)'
             }),
             stroke: new ol.style.Stroke({
                 color: '#FF7F50',
@@ -97,23 +101,32 @@ var createPolySelectedStyleFunction = function () {
     };
 };
 
-regionLayer = new ol.layer.Vector({
+var regionLayer = new ol.layer.Vector({
     source: regionSource,
-    style: createPolyStyleFunction(),
+    style: createPolyStyleFunction('24'),
     title: 'אזורים',
-    name: 'regions'
+    id: 1
 });
 
-cityLayer = new ol.layer.Vector({
+var cityLayer = new ol.layer.Vector({
     source: citySource,
-    style: createPolyStyleFunction(),
-    title: 'ערים'
+    style: createPolyStyleFunction('22'),
+    title: 'ערים',
+    id: 2
 });
 
-regionLayer.on('change:visible', function () {
-    if (regionLayer.getVisible() && regionLayer.getSource().getFeatures().length == 0) {
-        initPolyLayer("/GetAreas", null, regionLayer);
-    }
+var neighborhoodLayer = new ol.layer.Vector({
+    source: neighborhoodSource,
+    style: createPolyStyleFunction('12'),
+    title: 'שכונות',
+    id: 3
+});
+
+var adLayer = new ol.layer.Vector({
+    source: adSource,
+    style: createPointStyleFunction(),
+    title: 'דירות',
+    id: 4
 });
 
 var select = new ol.interaction.Select({
@@ -129,23 +142,38 @@ var map = new ol.Map({
     controls: ol.control.defaults({ attribution: false }).
     extend([layerSwitcher]),
     interactions: ol.interaction.defaults().extend([select]),
-    layers: [raster, cityLayer, regionLayer],
+    layers: [raster, adLayer, neighborhoodLayer, cityLayer, regionLayer],
     target: 'map',
     view: new ol.View({
         projection: 'EPSG:4326',
         extent: [34.2200, 29.4900, 35.6800, 33.2700],
-        center: [34.785, 32.085],
-        zoom: 13,
+        center: [34.79802606, 32.08793202],
+        zoom: 12,
         minZoom: 7,
         maxZoom: 20
     })
 });
 
 map.on('singleclick', function (evt) {
-    map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {        
-        if (layer.U.name == 'regions') {
-            debugger
-            regionLayer.setVisible(false);
+    map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+        switch (feature.layerid) {
+            case 1:
+                initPolyLayer("/GetCitiesByArea", { area: 1 }, cityLayer);
+                map.getView().fit(feature.getGeometry(), map.getSize());
+                feature.setStyle(emptyImgStyle);
+                break;
+            case 2:
+                initPolyLayer("/GetNeighborhoodsByCity", { city: feature.id }, neighborhoodLayer);
+                map.getView().fit(feature.getGeometry(), map.getSize());
+                feature.setStyle(emptyImgStyle);
+                break;
+            case 3:
+                initPolyLayer("/GetAdsByNeighborhood", { nid: feature.id }, adLayer);
+                map.getView().fit(feature.getGeometry(), map.getSize());
+                feature.setStyle(emptyImgStyle);
+                break;
+            default:
+                break;
         }
     });
 });
@@ -165,11 +193,12 @@ var initPolyLayer = function (action, params, layer) {
             featr.labelBorderColor = result[i].LabelBorderColor;
             featr.borderWidth = result[i].BorderWidth;
             featr.labelBorderWidth = result[i].LabelBorderWidth;
+            featr.layerid = layer.U.id;
 
             featr.getGeometry();
             layer.getSource().addFeature(featr);
         }
     }, "json")
 };
+
 initPolyLayer("/GetAreas", null, regionLayer);
-initPolyLayer("/GetCities", null, cityLayer);

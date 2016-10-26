@@ -16,3 +16,12 @@ D:\Yoav\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.xml
 D:\Yoav\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.SqlServer.xml
 D:\Yoav\Yad2Demo\Yad2.Demo.DAL\obj\Debug\Yad2.Demo.DAL.dll
 D:\Yoav\Yad2Demo\Yad2.Demo.DAL\obj\Debug\Yad2.Demo.DAL.pdb
+E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\bin\Debug\Yad2.Demo.DAL.dll.config
+E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\bin\Debug\Yad2.Demo.DAL.dll
+E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\bin\Debug\Yad2.Demo.DAL.pdb
+E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.dll
+E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.SqlServer.dll
+E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.xml
+E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.SqlServer.xml
+E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\obj\Debug\Yad2.Demo.DAL.dll
+E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\obj\Debug\Yad2.Demo.DAL.pdb
