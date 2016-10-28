@@ -50,7 +50,7 @@ var createPolyStyleFunction = function (font) {
             }),
             text: new ol.style.Text({
                 text: feature.name,
-                font: 'Bold '+ font +'px Arial',
+                font: 'Bold ' + font + 'px Arial',
                 fill: new ol.style.Fill({ color: feature.labelColor != null ? feature.labelColor : '#000' }),
                 stroke: new ol.style.Stroke({
                     color: feature.labelBorderColor != null ? feature.labelBorderColor : '#000',
@@ -126,11 +126,12 @@ var adLayer = new ol.layer.Vector({
     source: adSource,
     style: createPointStyleFunction(),
     title: 'דירות',
-    id: 4
+    id: 5
 });
 
 var select = new ol.interaction.Select({
     condition: ol.events.condition.pointerMove,
+    layers: [regionLayer, cityLayer, neighborhoodLayer],
     style: createPolySelectedStyleFunction(),
     wrapX: false,
     toggleCondition: ol.events.condition.never,
@@ -138,11 +139,72 @@ var select = new ol.interaction.Select({
     removeCondition: ol.events.condition.shiftKeyOnly
 });
 
+
+var clusterSource = new ol.source.Cluster({
+    distance: 20,
+    source: adSource
+});
+
+var styleCache = {};
+
+var clusters = new ol.layer.Vector({
+    source: clusterSource,
+    id: 4,
+    title: 'דירות',
+    style: function (feature, resolution) {        
+        var size = feature.get('features').length;
+        if (size == 1) {
+            debugger
+        }
+        var style = new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: size > 1 ? 18 : 10,
+                    stroke: new ol.style.Stroke({
+                        color: size > 1 ? '#fff' : '#fff',
+                        width: size > 1 ? 1 : 2
+                    }),
+                    fill: new ol.style.Fill({
+                        color: size > 1 ? '#3399CC' : '#FF0000'
+                    })
+                }),
+                text: new ol.style.Text({
+                    text: size > 1 ? size.toString() : feature.get('features')[0].name,
+                    font: size > 1 ? '16px Arial' : '12px Arial',
+                    fill: new ol.style.Fill({
+                        color: size > 1 ? '#fff' : '#ff0f0f'
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: size > 1 ? '#fff' : '#fff',
+                        width: size > 1 ? 0.5 : 2
+                    }),
+                    offsetY: size > 1 ? 0 : -5
+                })
+            });
+        //   styleCache[size] = style;
+        return style;
+        }
+     //   return style;
+});
+
+
+var setRadiusByAvgPrice = function (feature, resolution) {
+    
+    var total = 0;
+    var size = feature.get('features').length;
+    for (var i = 0; i < size; i++) {
+        debugger
+        total += parseFloat(feature.get('features')[i].name.replace(/\D/g, ''));
+    }
+    var avg = total / size;
+    var radius = size / 4 * (avg * 0.000003);
+    return radius;
+}
+
 var map = new ol.Map({
     controls: ol.control.defaults({ attribution: false }).
     extend([layerSwitcher]),
     interactions: ol.interaction.defaults().extend([select]),
-    layers: [raster, adLayer, neighborhoodLayer, cityLayer, regionLayer],
+    layers: [raster, clusters, neighborhoodLayer, cityLayer, regionLayer],
     target: 'map',
     view: new ol.View({
         projection: 'EPSG:4326',
