@@ -139,7 +139,6 @@ var select = new ol.interaction.Select({
     removeCondition: ol.events.condition.shiftKeyOnly
 });
 
-
 var clusterSource = new ol.source.Cluster({
     distance: 20,
     source: adSource
@@ -151,48 +150,96 @@ var clusters = new ol.layer.Vector({
     source: clusterSource,
     id: 4,
     title: 'דירות',
-    style: function (feature, resolution) {        
+    style: function (feature, resolution) {
         var size = feature.get('features').length;
         if (size == 1) {
-            debugger
+            //debugger
         }
         var style = new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: size > 1 ? 18 : 10,
-                    stroke: new ol.style.Stroke({
-                        color: size > 1 ? '#fff' : '#fff',
-                        width: size > 1 ? 1 : 2
-                    }),
-                    fill: new ol.style.Fill({
-                        color: size > 1 ? '#3399CC' : '#FF0000'
-                    })
+            image: new ol.style.Circle({
+                radius: size > 1 ? 18 : 10,
+                stroke: new ol.style.Stroke({
+                    color: size > 1 ? '#fff' : '#fff',
+                    width: size > 1 ? 1 : 2
                 }),
-                text: new ol.style.Text({
-                    text: size > 1 ? size.toString() : feature.get('features')[0].name,
-                    font: size > 1 ? '16px Arial' : '12px Arial',
-                    fill: new ol.style.Fill({
-                        color: size > 1 ? '#fff' : '#ff0f0f'
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: size > 1 ? '#fff' : '#fff',
-                        width: size > 1 ? 0.5 : 2
-                    }),
-                    offsetY: size > 1 ? 0 : -5
+                fill: new ol.style.Fill({
+                    color: size > 1 ? '#3399CC' : '#FF0000'
                 })
-            });
+            }),
+            text: new ol.style.Text({
+                text: size > 1 ? size.toString() : feature.get('features')[0].name,
+                font: size > 1 ? '16px Arial' : '12px Arial',
+                fill: new ol.style.Fill({
+                    color: size > 1 ? '#fff' : '#ff0f0f'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: size > 1 ? '#fff' : '#fff',
+                    width: size > 1 ? 0.5 : 2
+                }),
+                offsetY: size > 1 ? 0 : -5
+            })
+        });
         //   styleCache[size] = style;
         return style;
-        }
-     //   return style;
+    }
+    //   return style;
 });
 
+var adselect = new ol.interaction.Select({
+    condition: ol.events.condition.pointerMove,
+    layers: [clusters],
+    //style: createPointSelectedStyleFunction(),
+    wrapX: false,
+    toggleCondition: ol.events.condition.never,
+    addCondition: ol.events.condition.altKeyOnly,
+    removeCondition: ol.events.condition.shiftKeyOnly
+});
+
+// Popup showing the position the user clicked
+var popup = new ol.Overlay({
+    element: document.getElementById('popup')
+});
+
+adselect.on('select', function (e) {
+    if (e.selected.length > 0) {
+        var singleSelected = e.selected[0].get('features')[0];
+        debugger
+        var hoverfeaturetimeout = setTimeout(function () {
+            if (e.selected.length > 0) {
+                var element = popup.getElement();
+
+                $("#popup").attr('title', singleSelected.rooms + ' חדרים - למכירה');
+
+                $(element).popover('destroy');
+                popup.setPosition(e.mapBrowserEvent.coordinate);
+                //singleSelected.getGeometry().B
+
+                // the keys are quoted to prevent renaming in ADVANCED mode.
+                $(element).popover({
+                    'placement': 'top',
+                    'offset': '-15px -15px',
+                    'animation': false,
+                    'html': true,
+                    'content': '<img style="height: 100%; width: 100%; object-fit: contain" src="/Content/ads/' + singleSelected.pic + '.jpg" /><br /><p>מחיר: ' + singleSelected.name + '</p>'
+                });
+                $(element).popover('show');
+
+            } else {
+                map.getOverlays().forEach(function (overlay) { map.removeOverlay(overlay) });
+            }
+        }, 500);
+    } else if (e.deselected.length > 0) {
+        var singleDeselected = e.deselected[0].get('features')[0];
+        var element = popup.getElement();
+        $(element).popover('destroy');
+    }
+});
 
 var setRadiusByAvgPrice = function (feature, resolution) {
-    
+
     var total = 0;
     var size = feature.get('features').length;
     for (var i = 0; i < size; i++) {
-        debugger
         total += parseFloat(feature.get('features')[i].name.replace(/\D/g, ''));
     }
     var avg = total / size;
@@ -203,8 +250,8 @@ var setRadiusByAvgPrice = function (feature, resolution) {
 var map = new ol.Map({
     controls: ol.control.defaults({ attribution: false }).
     extend([layerSwitcher]),
-    interactions: ol.interaction.defaults().extend([select]),
-    layers: [raster, clusters, neighborhoodLayer, cityLayer, regionLayer],
+    interactions: ol.interaction.defaults().extend([select, adselect]),
+    layers: [raster, regionLayer, cityLayer, neighborhoodLayer, clusters],
     target: 'map',
     view: new ol.View({
         projection: 'EPSG:4326',
@@ -215,6 +262,8 @@ var map = new ol.Map({
         maxZoom: 20
     })
 });
+
+map.addOverlay(popup);
 
 map.on('singleclick', function (evt) {
     map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
@@ -256,6 +305,8 @@ var initPolyLayer = function (action, params, layer) {
             featr.borderWidth = result[i].BorderWidth;
             featr.labelBorderWidth = result[i].LabelBorderWidth;
             featr.layerid = layer.U.id;
+            featr.pic = result[i].Pic;
+            featr.rooms = result[i].Rooms;
 
             featr.getGeometry();
             layer.getSource().addFeature(featr);

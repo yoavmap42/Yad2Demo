@@ -74,7 +74,9 @@ namespace Yad2.Demo.UI.Services.MapService
                 {
                     Name = x.Price.HasValue ? x.Price.Value.ToString("C0", new CultureInfo("he-IL", false)) : "0",
                     Geometry = x.SP_GEOMETRY,
-                    Id = x.ID.ToString()
+                    Id = x.ID.ToString(),
+                    Pic = x.PicRef.HasValue ? x.PicRef.Value.ToString() : "",
+                    Rooms = x.Rooms
                 }).ToList();
             }
         }

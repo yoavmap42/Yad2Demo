@@ -240,6 +240,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Content\ads\1.jpg" />
+    <Content Include="Content\ads\10.jpg" />
+    <Content Include="Content\ads\2.jpg" />
+    <Content Include="Content\ads\3.jpg" />
+    <Content Include="Content\ads\4.jpg" />
+    <Content Include="Content\ads\5.jpg" />
+    <Content Include="Content\ads\6.jpg" />
+    <Content Include="Content\ads\7.jpg" />
+    <Content Include="Content\ads\8.JPG" />
+    <Content Include="Content\ads\9.jpg" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\Map42LargeTransparent36.png" />
@@ -270,6 +282,10 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -279,6 +295,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\ol-debug.js" />
     <Content Include="Scripts\ol.js" />
     <Content Include="Scripts\ol3-layerswitcher.js" />

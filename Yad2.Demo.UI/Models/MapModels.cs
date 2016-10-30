@@ -19,6 +19,8 @@ namespace Yad2.Demo.UI.Models
         public string LabelBorderColor { get; set; }
         public int BorderWidth { get; set; }
         public int LabelBorderWidth { get; set; }
+        public double? Rooms { get; set; }
+        public string Pic { get; set; }
         // public Geometry Geometry { get; set; }
         // public SqlGeometry Geometry { get; set; }
         public DbGeometry Geometry { get; set; }
