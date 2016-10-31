@@ -27,7 +27,7 @@ namespace Yad2.Demo.DAL
         public Nullable<decimal> Y { get; set; }
         public System.Data.Entity.Spatial.DbGeometry SP_GEOMETRY { get; set; }
     
-        public virtual ICollection<Listings> Listings { get; set; }
         public virtual Municipalities Municipalities { get; set; }
+        public virtual ICollection<Listings> Listings { get; set; }
     }
 }

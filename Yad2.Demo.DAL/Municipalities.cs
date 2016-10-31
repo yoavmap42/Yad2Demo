@@ -16,8 +16,8 @@ namespace Yad2.Demo.DAL
     {
         public Municipalities()
         {
-            this.Listings = new HashSet<Listings>();
             this.Streets = new HashSet<Streets>();
+            this.Listings = new HashSet<Listings>();
         }
     
         public string MunicipalName { get; set; }
@@ -30,7 +30,7 @@ namespace Yad2.Demo.DAL
         public System.Data.Entity.Spatial.DbGeometry SP_GEOMETRY { get; set; }
     
         public virtual Areas Areas { get; set; }
-        public virtual ICollection<Listings> Listings { get; set; }
         public virtual ICollection<Streets> Streets { get; set; }
+        public virtual ICollection<Listings> Listings { get; set; }
     }
 }

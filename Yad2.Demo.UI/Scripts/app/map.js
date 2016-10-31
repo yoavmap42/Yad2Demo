@@ -1,4 +1,6 @@
-﻿var raster = new ol.layer.Tile({
+﻿var element;
+
+var raster = new ol.layer.Tile({
     source: new ol.source.OSM()
 });
 
@@ -37,6 +39,40 @@ var createPointStyleFunction = function () {
     };
 };
 
+var createClusterStyleFunction = function () {
+    return function (feature, resolution) {
+        var size = feature.get('features').length;
+        if (size == 1) {
+            //debugger
+        }
+        var style = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: size > 1 ? 18 : 10,
+                stroke: new ol.style.Stroke({
+                    color: size > 1 ? '#fff' : '#fff',
+                    width: size > 1 ? 1 : 2
+                }),
+                fill: new ol.style.Fill({
+                    color: size > 1 ? '#3399CC' : '#FF0000'
+                })
+            }),
+            text: new ol.style.Text({
+                text: size > 1 ? size.toString() : feature.get('features')[0].name,
+                font: size > 1 ? '16px Arial' : '12px Arial',
+                fill: new ol.style.Fill({
+                    color: size > 1 ? '#fff' : '#ff0f0f'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: size > 1 ? '#fff' : '#fff',
+                    width: size > 1 ? 0.5 : 2
+                }),
+                offsetY: size > 1 ? 0 : -5
+            })
+        });
+        //   styleCache[size] = style;
+        return style;
+    };
+};
 
 var createPolyStyleFunction = function (font) {
     return function (feature) {
@@ -82,7 +118,7 @@ var createPolySelectedStyleFunction = function () {
                 width: 2
             }),
             text: new ol.style.Text({
-                text: feature.name,
+                text: feature.name + ': ' + feature.adscount,
                 font: 'Bold 24px Arial',
                 fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 1)' }),
                 stroke: new ol.style.Stroke({
@@ -150,45 +186,13 @@ var clusters = new ol.layer.Vector({
     source: clusterSource,
     id: 4,
     title: 'דירות',
-    style: function (feature, resolution) {
-        var size = feature.get('features').length;
-        if (size == 1) {
-            //debugger
-        }
-        var style = new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: size > 1 ? 18 : 10,
-                stroke: new ol.style.Stroke({
-                    color: size > 1 ? '#fff' : '#fff',
-                    width: size > 1 ? 1 : 2
-                }),
-                fill: new ol.style.Fill({
-                    color: size > 1 ? '#3399CC' : '#FF0000'
-                })
-            }),
-            text: new ol.style.Text({
-                text: size > 1 ? size.toString() : feature.get('features')[0].name,
-                font: size > 1 ? '16px Arial' : '12px Arial',
-                fill: new ol.style.Fill({
-                    color: size > 1 ? '#fff' : '#ff0f0f'
-                }),
-                stroke: new ol.style.Stroke({
-                    color: size > 1 ? '#fff' : '#fff',
-                    width: size > 1 ? 0.5 : 2
-                }),
-                offsetY: size > 1 ? 0 : -5
-            })
-        });
-        //   styleCache[size] = style;
-        return style;
-    }
-    //   return style;
+    style: createClusterStyleFunction()
 });
 
 var adselect = new ol.interaction.Select({
     condition: ol.events.condition.pointerMove,
     layers: [clusters],
-    //style: createPointSelectedStyleFunction(),
+    style: createClusterStyleFunction(),
     wrapX: false,
     toggleCondition: ol.events.condition.never,
     addCondition: ol.events.condition.altKeyOnly,
@@ -202,36 +206,46 @@ var popup = new ol.Overlay({
 
 adselect.on('select', function (e) {
     if (e.selected.length > 0) {
-        var singleSelected = e.selected[0].get('features')[0];
-        debugger
-        var hoverfeaturetimeout = setTimeout(function () {
-            if (e.selected.length > 0) {
-                var element = popup.getElement();
 
-                $("#popup").attr('title', singleSelected.rooms + ' חדרים - למכירה');
+        if (e.selected[0].U != null && e.selected[0].get('features').length == 1) {
 
-                $(element).popover('destroy');
-                popup.setPosition(e.mapBrowserEvent.coordinate);
-                //singleSelected.getGeometry().B
+            var singleSelected = e.selected[0].get('features')[0];
 
-                // the keys are quoted to prevent renaming in ADVANCED mode.
-                $(element).popover({
-                    'placement': 'top',
-                    'offset': '-15px -15px',
-                    'animation': false,
-                    'html': true,
-                    'content': '<img style="height: 100%; width: 100%; object-fit: contain" src="/Content/ads/' + singleSelected.pic + '.jpg" /><br /><p>מחיר: ' + singleSelected.name + '</p>'
-                });
-                $(element).popover('show');
+            var hoverfeaturetimeout = setTimeout(function () {
+                if (e.selected.length > 0) {
+                    element = popup.getElement();
 
-            } else {
-                map.getOverlays().forEach(function (overlay) { map.removeOverlay(overlay) });
-            }
-        }, 500);
+                    $("#popup").attr('title', 'למכירה');
+
+                    $(element).popover('destroy');
+                    popup.setPosition(singleSelected.getGeometry().B);
+                    //singleSelected.getGeometry().B
+                    //e.mapBrowserEvent.coordinate
+
+                    // the keys are quoted to prevent renaming in ADVANCED mode.
+                    $(element).popover({
+                        'placement': 'auto',
+                        'offset': '0 10px',
+                        'trigger': 'focus',
+                        'animation': false,
+                        'viewport': { "selector": "#map", "padding": 5 },
+                        'container': '#map',
+                        'html': true,
+                        'content': '<img style="height: 100%; width: 100%; object-fit: contain" src="/Content/ads/' + singleSelected.pic + '.jpg" /><br /><br /><p>מחיר: '
+                            + singleSelected.name + '</p><p>חדרים: ' + singleSelected.rooms + '</p><p>מ"ר: ' + singleSelected.sqft + '</p>'
+                    });
+                    $(element).popover('show');
+
+                } else {
+                    map.getOverlays().forEach(function (overlay) { map.removeOverlay(overlay) });
+                }
+            }, 500);
+        }
     } else if (e.deselected.length > 0) {
-        var singleDeselected = e.deselected[0].get('features')[0];
-        var element = popup.getElement();
-        $(element).popover('destroy');
+
+        //var singleDeselected = e.deselected[0].get('features')[0];
+        //  element = popup.getElement();
+        //  $(element).popover('destroy');
     }
 });
 
@@ -266,20 +280,49 @@ var map = new ol.Map({
 map.addOverlay(popup);
 
 map.on('singleclick', function (evt) {
+    if (element != null) {
+        $(element).popover('destroy');
+    }
     map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
         switch (feature.layerid) {
-            case 1:
-                initPolyLayer("/GetCitiesByArea", { area: 1 }, cityLayer);
+            case 1:              
+                neighborhoodSource.clear();
+                citySource.clear();
+                initPolyLayer("/GetCitiesByArea", { area: 1 }, cityLayer);                                
+                layer.getSource().forEachFeature(function (f) {
+                    if (f!= feature && f.getStyle() == emptyImgStyle) {
+                        f.setStyle(f.originalStyle);
+                    }
+                });
+                feature.originalStyle = feature.getStyle();
                 map.getView().fit(feature.getGeometry(), map.getSize());
+                map.getView().setZoom(13);
                 feature.setStyle(emptyImgStyle);
                 break;
             case 2:
-                initPolyLayer("/GetNeighborhoodsByCity", { city: feature.id }, neighborhoodLayer);
+                adSource.clear();
+                neighborhoodSource.clear();
+                initPolyLayer("/GetNeighborhoodsByCity", { city: feature.id }, neighborhoodLayer); 
+                layer.getSource().forEachFeature(function (f) {
+                    if (f != feature && f.getStyle() == emptyImgStyle) {
+                        f.setStyle(f.originalStyle);
+                    }
+                });
+                feature.originalStyle = feature.getStyle();
                 map.getView().fit(feature.getGeometry(), map.getSize());
+                map.getView().setZoom(14);
                 feature.setStyle(emptyImgStyle);
                 break;
             case 3:
+                adSource.clear();
                 initPolyLayer("/GetAdsByNeighborhood", { nid: feature.id }, adLayer);
+                
+                layer.getSource().forEachFeature(function (f) {
+                    if (f != feature && f.getStyle() == emptyImgStyle) {
+                        f.setStyle(f.originalStyle);
+                    }
+                });
+                feature.originalStyle = feature.getStyle();
                 map.getView().fit(feature.getGeometry(), map.getSize());
                 feature.setStyle(emptyImgStyle);
                 break;
@@ -297,6 +340,7 @@ var initPolyLayer = function (action, params, layer) {
         for (var i = 0; i < result.length; i++) {
             featr = format.readFeature(result[i].Geometry.Geometry.WellKnownText);
             featr.name = result[i].Name;
+            featr.adscount = result[i].AdCount;
             featr.id = result[i].Id;
             featr.bgColor = result[i].BgColor;
             featr.borderColor = result[i].BorderColor;
@@ -307,6 +351,11 @@ var initPolyLayer = function (action, params, layer) {
             featr.layerid = layer.U.id;
             featr.pic = result[i].Pic;
             featr.rooms = result[i].Rooms;
+            featr.sqft = result[i].Sqft;
+            featr.address = result[i].Address;
+            featr.price = result[i].Price;
+            featr.isagency = result[i].IsAgency;
+            featr.isnew = result[i].IsNew;
 
             featr.getGeometry();
             layer.getSource().addFeature(featr);

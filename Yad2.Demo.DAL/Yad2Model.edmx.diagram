@@ -30,15 +30,15 @@
         <AssociationConnector Association="Yad2Model.FK_AddressMaster_Yad2City" ManuallyRouted="false" />
         <AssociationConnector Association="Yad2Model.FK_Yad2Street_Yad2City" ManuallyRouted="false" />
         <EntityTypeShape EntityType="Yad2Model.Areas" Width="1.5" PointX="16.375" PointY="4.5" />
-        <EntityTypeShape EntityType="Yad2Model.Listings" Width="1.5" PointX="23.125" PointY="5.875" />
         <EntityTypeShape EntityType="Yad2Model.Municipalities" Width="1.5" PointX="18.625" PointY="4.125" />
         <EntityTypeShape EntityType="Yad2Model.Neighborhoods" Width="1.5" PointX="20.875" PointY="6" />
         <EntityTypeShape EntityType="Yad2Model.Streets" Width="1.5" PointX="20.875" PointY="10.25" />
         <AssociationConnector Association="Yad2Model.FK_Municipalities_Areas" />
+        <AssociationConnector Association="Yad2Model.FK_Streets_Municipalities" />
+        <EntityTypeShape EntityType="Yad2Model.Listings" Width="1.5" PointX="23.125" PointY="6" />
         <AssociationConnector Association="Yad2Model.FK_Listings_Municipalities" />
         <AssociationConnector Association="Yad2Model.FK_Listings_Neighborhoods" />
         <AssociationConnector Association="Yad2Model.FK_Listings_Streets" />
-        <AssociationConnector Association="Yad2Model.FK_Streets_Municipalities" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

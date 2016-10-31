@@ -78,7 +78,7 @@ namespace Yad2.Demo.UI.Controllers
         public HttpResponseMessage GetAdsByNeighborhood(int nid)
         {
             var response = new HttpResponseMessage();
-            List<PolyLayerViewModel> ads;
+            List<ListingsLayerViewModel> ads;
             try
             {
                 ads = _mapService.GetAdsByNeighborhood(nid);
@@ -90,7 +90,7 @@ namespace Yad2.Demo.UI.Controllers
                 return response;
             }
             response.StatusCode = HttpStatusCode.OK;
-            response.Content = new ObjectContent<List<PolyLayerViewModel>>(ads, new JsonMediaTypeFormatter());
+            response.Content = new ObjectContent<List<ListingsLayerViewModel>>(ads, new JsonMediaTypeFormatter());
             return response;
         }
 

@@ -43,7 +43,22 @@ namespace Yad2.Demo.BL
 
         public IEnumerable<Listings> GetListingsByNeighborhood(int nid)
         {
-            return _db.Listings.Where(x => x.ShchunaID == nid);
+            return _db.Listings.Where(x => x.ShchunaID == nid && x.IsSold == false);
+        }
+
+        public int GetListingsCountByArea(int aid)
+        {
+            return _db.Listings.Include("Municipalities").Count(x => x.Municipalities.AreaID == aid && x.IsSold == false);
+        }
+
+        public int GetListingsCountByCity(string cid)
+        {
+            return _db.Listings.Count(x => x.CityCode == cid && x.IsSold == false);
+        }
+
+        public int GetListingsCountByNeighborhood(int nid)
+        {
+            return _db.Listings.Count(x => x.ShchunaID == nid && x.IsSold == false);
         }
 
         public MapManager()

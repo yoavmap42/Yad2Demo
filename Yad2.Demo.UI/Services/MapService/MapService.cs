@@ -23,7 +23,8 @@ namespace Yad2.Demo.UI.Services.MapService
                     BorderWidth = 3,
                     //  LabelBorderColor = "rgba(255, 165, 0, 1)",
                     //  LabelBorderWidth = 1,
-                    LabelColor = "rgba(255, 255, 255, 1)"
+                    LabelColor = "rgba(255, 255, 255, 1)",
+                    AdCount = manager.GetListingsCountByArea(x.ID)
                 }).ToList();
             }
         }
@@ -42,7 +43,8 @@ namespace Yad2.Demo.UI.Services.MapService
                     BorderWidth = 3,
                     //  LabelBorderColor = "rgba(255, 165, 0, 1)",
                     //  LabelBorderWidth = 1,
-                    LabelColor = "rgba(255, 255, 255, 1)"
+                    LabelColor = "rgba(255, 255, 255, 1)",
+                    AdCount = manager.GetListingsCountByCity(x.MunicipalCode)
                 }).ToList();
             }
         }
@@ -61,22 +63,28 @@ namespace Yad2.Demo.UI.Services.MapService
                     BorderWidth = 3,
                     //  LabelBorderColor = "rgba(255, 165, 0, 1)",
                     //  LabelBorderWidth = 1,
-                    LabelColor = "rgba(255, 255, 255, 1)"
+                    LabelColor = "rgba(255, 255, 255, 1)",
+                    AdCount = manager.GetListingsCountByNeighborhood(x.ID)
                 }).ToList();
             }
         }
 
-        public List<PolyLayerViewModel> GetAdsByNeighborhood(int nid)
+        public List<ListingsLayerViewModel> GetAdsByNeighborhood(int nid)
         {
             using (var manager = new MapManager())
             {
-                return manager.GetListingsByNeighborhood(nid).Select(x => new PolyLayerViewModel
+                return manager.GetListingsByNeighborhood(nid).Select(x => new ListingsLayerViewModel
                 {
                     Name = x.Price.HasValue ? x.Price.Value.ToString("C0", new CultureInfo("he-IL", false)) : "0",
                     Geometry = x.SP_GEOMETRY,
                     Id = x.ID.ToString(),
                     Pic = x.PicRef.HasValue ? x.PicRef.Value.ToString() : "",
-                    Rooms = x.Rooms
+                    Rooms = x.Rooms,
+                    Price = x.Price,
+                    Sqft = x.SqMeter,
+                    Address = x.Address,
+                    IsAgency = x.IsFromAgent,
+                    IsNew = x.IsFirstHand
                 }).ToList();
             }
         }

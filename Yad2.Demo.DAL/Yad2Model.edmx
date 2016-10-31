@@ -75,9 +75,9 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <Property Name="Price" Type="int" />
           <Property Name="Shchuna" Type="varchar" MaxLength="100" />
           <Property Name="ShchunaID" Type="int" />
-          <Property Name="IsSold" Type="int" />
-          <Property Name="IsFromAgent" Type="int" />
-          <Property Name="IsFirstHand" Type="int" />
+          <Property Name="IsSold" Type="bit" />
+          <Property Name="IsFromAgent" Type="bit" />
+          <Property Name="IsFirstHand" Type="bit" />
           <Property Name="PicRef" Type="int" />
           <Property Name="Rooms" Type="int" />
           <Property Name="SqMeter" Type="decimal" Precision="9" Scale="2" />
@@ -927,7 +927,6 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
             <End Role="Yad2Street" EntitySet="Yad2Street" />
           </AssociationSet>
           <EntitySet Name="Areas" EntityType="Yad2Model.Areas" />
-          <EntitySet Name="Listings" EntityType="Yad2Model.Listings" />
           <EntitySet Name="Municipalities" EntityType="Yad2Model.Municipalities" />
           <EntitySet Name="Neighborhoods" EntityType="Yad2Model.Neighborhoods" />
           <EntitySet Name="Streets" EntityType="Yad2Model.Streets" />
@@ -935,6 +934,11 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
             <End Role="Areas" EntitySet="Areas" />
             <End Role="Municipalities" EntitySet="Municipalities" />
           </AssociationSet>
+          <AssociationSet Name="FK_Streets_Municipalities" Association="Yad2Model.FK_Streets_Municipalities">
+            <End Role="Municipalities" EntitySet="Municipalities" />
+            <End Role="Streets" EntitySet="Streets" />
+          </AssociationSet>
+          <EntitySet Name="Listings" EntityType="Yad2Model.Listings" />
           <AssociationSet Name="FK_Listings_Municipalities" Association="Yad2Model.FK_Listings_Municipalities">
             <End Role="Municipalities" EntitySet="Municipalities" />
             <End Role="Listings" EntitySet="Listings" />
@@ -946,10 +950,6 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <AssociationSet Name="FK_Listings_Streets" Association="Yad2Model.FK_Listings_Streets">
             <End Role="Streets" EntitySet="Streets" />
             <End Role="Listings" EntitySet="Listings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Streets_Municipalities" Association="Yad2Model.FK_Streets_Municipalities">
-            <End Role="Municipalities" EntitySet="Municipalities" />
-            <End Role="Streets" EntitySet="Streets" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Areas">
@@ -964,33 +964,6 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <Property Name="SP_GEOMETRY" Type="Geometry" />
           <NavigationProperty Name="Municipalities" Relationship="Yad2Model.FK_Municipalities_Areas" FromRole="Areas" ToRole="Municipalities" />
         </EntityType>
-        <EntityType Name="Listings">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="StreetName" Type="String" MaxLength="23" FixedLength="false" Unicode="false" />
-          <Property Name="StreetID" Type="Int32" />
-          <Property Name="HouseNumber" Type="Int16" />
-          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="CityCode" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
-          <Property Name="Price" Type="Int32" />
-          <Property Name="Shchuna" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ShchunaID" Type="Int32" />
-          <Property Name="IsSold" Type="Int32" />
-          <Property Name="IsFromAgent" Type="Int32" />
-          <Property Name="IsFirstHand" Type="Int32" />
-          <Property Name="PicRef" Type="Int32" />
-          <Property Name="Rooms" Type="Int32" />
-          <Property Name="SqMeter" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="X" Type="Double" />
-          <Property Name="Y" Type="Double" />
-          <Property Name="SP_GEOMETRY" Type="Geometry" />
-          <NavigationProperty Name="Municipalities" Relationship="Yad2Model.FK_Listings_Municipalities" FromRole="Listings" ToRole="Municipalities" />
-          <NavigationProperty Name="Neighborhoods" Relationship="Yad2Model.FK_Listings_Neighborhoods" FromRole="Listings" ToRole="Neighborhoods" />
-          <NavigationProperty Name="Streets" Relationship="Yad2Model.FK_Listings_Streets" FromRole="Listings" ToRole="Streets" />
-        </EntityType>
         <EntityType Name="Municipalities">
           <Key>
             <PropertyRef Name="MunicipalCode" />
@@ -1004,8 +977,8 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <Property Name="Latitude" Type="Double" />
           <Property Name="SP_GEOMETRY" Type="Geometry" />
           <NavigationProperty Name="Areas" Relationship="Yad2Model.FK_Municipalities_Areas" FromRole="Municipalities" ToRole="Areas" />
-          <NavigationProperty Name="Listings" Relationship="Yad2Model.FK_Listings_Municipalities" FromRole="Municipalities" ToRole="Listings" />
           <NavigationProperty Name="Streets" Relationship="Yad2Model.FK_Streets_Municipalities" FromRole="Municipalities" ToRole="Streets" />
+          <NavigationProperty Name="Listings" Relationship="Yad2Model.FK_Listings_Municipalities" FromRole="Municipalities" ToRole="Listings" />
         </EntityType>
         <EntityType Name="Neighborhoods">
           <Key>
@@ -1034,8 +1007,8 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <Property Name="X" Type="Decimal" Precision="9" Scale="6" />
           <Property Name="Y" Type="Decimal" Precision="9" Scale="6" />
           <Property Name="SP_GEOMETRY" Type="Geometry" />
-          <NavigationProperty Name="Listings" Relationship="Yad2Model.FK_Listings_Streets" FromRole="Streets" ToRole="Listings" />
           <NavigationProperty Name="Municipalities" Relationship="Yad2Model.FK_Streets_Municipalities" FromRole="Streets" ToRole="Municipalities" />
+          <NavigationProperty Name="Listings" Relationship="Yad2Model.FK_Listings_Streets" FromRole="Streets" ToRole="Listings" />
         </EntityType>
         <Association Name="FK_Municipalities_Areas">
           <End Type="Yad2Model.Areas" Role="Areas" Multiplicity="0..1" />
@@ -1049,6 +1022,45 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Streets_Municipalities">
+          <End Type="Yad2Model.Municipalities" Role="Municipalities" Multiplicity="0..1" />
+          <End Type="Yad2Model.Streets" Role="Streets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Municipalities">
+              <PropertyRef Name="MunicipalCode" />
+            </Principal>
+            <Dependent Role="Streets">
+              <PropertyRef Name="CityCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Listings">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StreetName" Type="String" MaxLength="23" FixedLength="false" Unicode="false" />
+          <Property Name="StreetID" Type="Int32" />
+          <Property Name="HouseNumber" Type="Int16" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CityCode" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Int32" />
+          <Property Name="Shchuna" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ShchunaID" Type="Int32" />
+          <Property Name="IsSold" Type="Boolean" />
+          <Property Name="IsFromAgent" Type="Boolean" />
+          <Property Name="IsFirstHand" Type="Boolean" />
+          <Property Name="PicRef" Type="Int32" />
+          <Property Name="Rooms" Type="Int32" />
+          <Property Name="SqMeter" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="X" Type="Double" />
+          <Property Name="Y" Type="Double" />
+          <Property Name="SP_GEOMETRY" Type="Geometry" />
+          <NavigationProperty Name="Municipalities" Relationship="Yad2Model.FK_Listings_Municipalities" FromRole="Listings" ToRole="Municipalities" />
+          <NavigationProperty Name="Neighborhoods" Relationship="Yad2Model.FK_Listings_Neighborhoods" FromRole="Listings" ToRole="Neighborhoods" />
+          <NavigationProperty Name="Streets" Relationship="Yad2Model.FK_Listings_Streets" FromRole="Listings" ToRole="Streets" />
+        </EntityType>
         <Association Name="FK_Listings_Municipalities">
           <End Type="Yad2Model.Municipalities" Role="Municipalities" Multiplicity="0..1" />
           <End Type="Yad2Model.Listings" Role="Listings" Multiplicity="*" />
@@ -1082,18 +1094,6 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
             </Principal>
             <Dependent Role="Listings">
               <PropertyRef Name="StreetID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Streets_Municipalities">
-          <End Type="Yad2Model.Municipalities" Role="Municipalities" Multiplicity="0..1" />
-          <End Type="Yad2Model.Streets" Role="Streets" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Municipalities">
-              <PropertyRef Name="MunicipalCode" />
-            </Principal>
-            <Dependent Role="Streets">
-              <PropertyRef Name="CityCode" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1292,31 +1292,6 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Listings">
-            <EntityTypeMapping TypeName="Yad2Model.Listings">
-              <MappingFragment StoreEntitySet="Listings">
-                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
-                <ScalarProperty Name="Y" ColumnName="Y" />
-                <ScalarProperty Name="X" ColumnName="X" />
-                <ScalarProperty Name="SqMeter" ColumnName="SqMeter" />
-                <ScalarProperty Name="Rooms" ColumnName="Rooms" />
-                <ScalarProperty Name="PicRef" ColumnName="PicRef" />
-                <ScalarProperty Name="IsFirstHand" ColumnName="IsFirstHand" />
-                <ScalarProperty Name="IsFromAgent" ColumnName="IsFromAgent" />
-                <ScalarProperty Name="IsSold" ColumnName="IsSold" />
-                <ScalarProperty Name="ShchunaID" ColumnName="ShchunaID" />
-                <ScalarProperty Name="Shchuna" ColumnName="Shchuna" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="HouseNumber" ColumnName="HouseNumber" />
-                <ScalarProperty Name="StreetID" ColumnName="StreetID" />
-                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Municipalities">
             <EntityTypeMapping TypeName="Yad2Model.Municipalities">
               <MappingFragment StoreEntitySet="Municipalities">
@@ -1356,6 +1331,31 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
                 <ScalarProperty Name="CityCode" ColumnName="CityCode" />
                 <ScalarProperty Name="CityName" ColumnName="CityName" />
                 <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Listings">
+            <EntityTypeMapping TypeName="Yad2Model.Listings">
+              <MappingFragment StoreEntitySet="Listings">
+                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
+                <ScalarProperty Name="Y" ColumnName="Y" />
+                <ScalarProperty Name="X" ColumnName="X" />
+                <ScalarProperty Name="SqMeter" ColumnName="SqMeter" />
+                <ScalarProperty Name="Rooms" ColumnName="Rooms" />
+                <ScalarProperty Name="PicRef" ColumnName="PicRef" />
+                <ScalarProperty Name="IsFirstHand" ColumnName="IsFirstHand" />
+                <ScalarProperty Name="IsFromAgent" ColumnName="IsFromAgent" />
+                <ScalarProperty Name="IsSold" ColumnName="IsSold" />
+                <ScalarProperty Name="ShchunaID" ColumnName="ShchunaID" />
+                <ScalarProperty Name="Shchuna" ColumnName="Shchuna" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="HouseNumber" ColumnName="HouseNumber" />
+                <ScalarProperty Name="StreetID" ColumnName="StreetID" />
+                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

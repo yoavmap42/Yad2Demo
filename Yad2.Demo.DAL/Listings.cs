@@ -24,9 +24,9 @@ namespace Yad2.Demo.DAL
         public Nullable<int> Price { get; set; }
         public string Shchuna { get; set; }
         public Nullable<int> ShchunaID { get; set; }
-        public Nullable<int> IsSold { get; set; }
-        public Nullable<int> IsFromAgent { get; set; }
-        public Nullable<int> IsFirstHand { get; set; }
+        public Nullable<bool> IsSold { get; set; }
+        public Nullable<bool> IsFromAgent { get; set; }
+        public Nullable<bool> IsFirstHand { get; set; }
         public Nullable<int> PicRef { get; set; }
         public Nullable<int> Rooms { get; set; }
         public Nullable<decimal> SqMeter { get; set; }

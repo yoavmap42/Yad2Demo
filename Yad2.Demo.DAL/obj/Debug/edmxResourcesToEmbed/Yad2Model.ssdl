@@ -70,9 +70,9 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
     <Property Name="Price" Type="int" />
     <Property Name="Shchuna" Type="varchar" MaxLength="100" />
     <Property Name="ShchunaID" Type="int" />
-    <Property Name="IsSold" Type="int" />
-    <Property Name="IsFromAgent" Type="int" />
-    <Property Name="IsFirstHand" Type="int" />
+    <Property Name="IsSold" Type="bit" />
+    <Property Name="IsFromAgent" Type="bit" />
+    <Property Name="IsFirstHand" Type="bit" />
     <Property Name="PicRef" Type="int" />
     <Property Name="Rooms" Type="int" />
     <Property Name="SqMeter" Type="decimal" Precision="9" Scale="2" />

@@ -39,9 +39,9 @@ namespace Yad2.Demo.DAL
         public virtual DbSet<Yad2Street> Yad2Street { get; set; }
         public virtual DbSet<AddressMaster> AddressMaster { get; set; }
         public virtual DbSet<Areas> Areas { get; set; }
-        public virtual DbSet<Listings> Listings { get; set; }
         public virtual DbSet<Municipalities> Municipalities { get; set; }
         public virtual DbSet<Neighborhoods> Neighborhoods { get; set; }
         public virtual DbSet<Streets> Streets { get; set; }
+        public virtual DbSet<Listings> Listings { get; set; }
     }
 }
