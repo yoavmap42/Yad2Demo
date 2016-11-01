@@ -1,4 +1,8 @@
 ﻿var element;
+var hideagent = false;
+var hidenoagent = false;
+var hidenewapt = false;
+var hideoldapt = false;
 
 var raster = new ol.layer.Tile({
     source: new ol.source.OSM()
@@ -9,6 +13,8 @@ var citySource = new ol.source.Vector();
 var neighborhoodSource = new ol.source.Vector();
 var adSource = new ol.source.Vector();
 
+var hiddenAdSource = new ol.source.Vector();
+
 var layerSwitcher = new ol.control.LayerSwitcher({
     tipLabel: 'שכבות'
 });
@@ -16,24 +22,29 @@ var layerSwitcher = new ol.control.LayerSwitcher({
 var createPointStyleFunction = function () {
     return function (feature) {
         var style = new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: 5,
-                fill: new ol.style.Fill({ color: feature.bgColor != null ? feature.bgColor : '#FF0000' }),
-                stroke: new ol.style.Stroke({
-                    color: feature.borderColor != null ? feature.borderColor : '#FFF',
-                    width: feature.borderWidth != null ? feature.borderWidth : 2
-                })
-            }),
-            text: new ol.style.Text({
-                text: feature.name,
-                font: '10px Arial',
-                fill: new ol.style.Fill({ color: feature.labelColor != null ? feature.labelColor : '#ff0f0f' }),
-                stroke: new ol.style.Stroke({
-                    color: feature.labelBorderColor != null ? feature.labelBorderColor : '#fff',
-                    width: feature.labelBorderWidth != null ? feature.labelBorderWidth : 2
-                }),
-                offsetY: -5
+            image: new ol.style.Icon({
+                anchor: [0.5, 1],
+                src: '/Content/images/pin.png'
             })
+
+            //    new ol.style.Circle({
+            //    radius: 5,
+            //    fill: new ol.style.Fill({ color: feature.bgColor != null ? feature.bgColor : '#FF0000' }),
+            //    stroke: new ol.style.Stroke({
+            //        color: feature.borderColor != null ? feature.borderColor : '#FFF',
+            //        width: feature.borderWidth != null ? feature.borderWidth : 2
+            //    })
+            //})
+            //text: new ol.style.Text({
+            //    text: feature.name,
+            //    font: '10px Arial',
+            //    fill: new ol.style.Fill({ color: feature.labelColor != null ? feature.labelColor : '#ff0f0f' }),
+            //    stroke: new ol.style.Stroke({
+            //        color: feature.labelBorderColor != null ? feature.labelBorderColor : '#fff',
+            //        width: feature.labelBorderWidth != null ? feature.labelBorderWidth : 2
+            //    }),
+            //    offsetY: -5
+            //})
         });
         return [style];
     };
@@ -46,28 +57,32 @@ var createClusterStyleFunction = function () {
             //debugger
         }
         var style = new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: size > 1 ? 18 : 10,
+            image: size > 1 ? new ol.style.Circle({
+                radius: 18,
                 stroke: new ol.style.Stroke({
-                    color: size > 1 ? '#fff' : '#fff',
-                    width: size > 1 ? 1 : 2
+                    color: '#fff',
+                    width: 1
                 }),
                 fill: new ol.style.Fill({
-                    color: size > 1 ? '#3399CC' : '#FF0000'
+                    color: '#3399CC'
                 })
+            })
+            : new ol.style.Icon({
+                //  anchor: [0.5, 1],
+                src: '/Content/images/pin.png'
             }),
-            text: new ol.style.Text({
-                text: size > 1 ? size.toString() : feature.get('features')[0].name,
-                font: size > 1 ? '16px Arial' : '12px Arial',
+            text: size > 1 ? new ol.style.Text({
+                text: size.toString(),
+                font: '16px Arial',
                 fill: new ol.style.Fill({
-                    color: size > 1 ? '#fff' : '#ff0f0f'
+                    color: '#fff'
                 }),
                 stroke: new ol.style.Stroke({
-                    color: size > 1 ? '#fff' : '#fff',
-                    width: size > 1 ? 0.5 : 2
+                    color: '#fff',
+                    width: 0.5
                 }),
-                offsetY: size > 1 ? 0 : -5
-            })
+                offsetY: 0
+            }) : null
         });
         //   styleCache[size] = style;
         return style;
@@ -285,12 +300,13 @@ map.on('singleclick', function (evt) {
     }
     map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
         switch (feature.layerid) {
-            case 1:              
+            case 1:
+                $("#paneldiv").hide('slow');
                 neighborhoodSource.clear();
                 citySource.clear();
-                initPolyLayer("/GetCitiesByArea", { area: 1 }, cityLayer);                                
+                initPolyLayer("/GetCitiesByArea", { area: 1 }, cityLayer);
                 layer.getSource().forEachFeature(function (f) {
-                    if (f!= feature && f.getStyle() == emptyImgStyle) {
+                    if (f != feature && f.getStyle() == emptyImgStyle) {
                         f.setStyle(f.originalStyle);
                     }
                 });
@@ -300,9 +316,19 @@ map.on('singleclick', function (evt) {
                 feature.setStyle(emptyImgStyle);
                 break;
             case 2:
+                $("#paneldiv").hide('slow');
                 adSource.clear();
+                hiddenAdSource.clear();
                 neighborhoodSource.clear();
-                initPolyLayer("/GetNeighborhoodsByCity", { city: feature.id }, neighborhoodLayer); 
+                hideagent = false; hidenoagent = false; hidenewapt = false; hideoldapt = false;
+
+                $(".adfilters").each(function () {
+                    if (this.checked == false) {
+                        $(this).trigger('click');
+                    }
+                });
+
+                initPolyLayer("/GetNeighborhoodsByCity", { city: feature.id }, neighborhoodLayer);
                 layer.getSource().forEachFeature(function (f) {
                     if (f != feature && f.getStyle() == emptyImgStyle) {
                         f.setStyle(f.originalStyle);
@@ -315,8 +341,9 @@ map.on('singleclick', function (evt) {
                 break;
             case 3:
                 adSource.clear();
+                hiddenAdSource.clear();
                 initPolyLayer("/GetAdsByNeighborhood", { nid: feature.id }, adLayer);
-                
+
                 layer.getSource().forEachFeature(function (f) {
                     if (f != feature && f.getStyle() == emptyImgStyle) {
                         f.setStyle(f.originalStyle);
@@ -325,6 +352,7 @@ map.on('singleclick', function (evt) {
                 feature.originalStyle = feature.getStyle();
                 map.getView().fit(feature.getGeometry(), map.getSize());
                 feature.setStyle(emptyImgStyle);
+                $("#paneldiv").show('slow');
                 break;
             default:
                 break;
@@ -332,6 +360,40 @@ map.on('singleclick', function (evt) {
     });
 });
 
+//map.getView().on('change:resolution', function (evt) {
+//    var nz = this.getZoom();
+//    var nlevel = nz < 13 ? 1 : (nz > 12 && nz < 14 ? 2 : (nz > 13 && nz < 16 ? 3 : 4));
+
+//    var oz = parseInt((Math.log10((1.40625 / evt.oldValue))) / 0.30102999566398114);
+//    var olevel = oz < 13 ? 1 : (oz > 12 && oz < 14 ? 2 : (oz > 13 && oz < 16 ? 3 : 4));
+
+//    if (nlevel != olevel) {
+//        var layrs = map.getLayers();
+//        switch (nlevel) {
+//            case 1:
+//                //$("#paneldiv").hide('slow');
+//                //adSource.clear();
+//                //hiddenAdSource.clear();
+//                //neighborhoodSource.clear();
+//                //citySource.clear();
+//                //regionSource.clear();
+//                //hideagent = false; hidenoagent = false; hidenewapt = false; hideoldapt = false;
+
+//                //$(".adfilters").each(function () {
+//                //    if (this.checked == false) {
+//                //        $(this).trigger('click');
+//                //    }
+//                //});
+//              //  initPolyLayer("/GetAreas", null, regionLayer);
+//                break;
+//            case 2:
+//              //  initPolyLayer("/GetCitiesByArea", { area: 1 }, cityLayer);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+//});
 
 var initPolyLayer = function (action, params, layer) {
     $.get(action, params, function (result) {
@@ -358,9 +420,106 @@ var initPolyLayer = function (action, params, layer) {
             featr.isnew = result[i].IsNew;
 
             featr.getGeometry();
-            layer.getSource().addFeature(featr);
+            if (layer == adLayer) {
+                if (hideagent && featr.isagency || hidenoagent && !featr.isagency || hidenewapt && featr.isnew || hideoldapt && !featr.isnew) {
+                    hiddenAdSource.addFeature(featr);
+                } else {
+                    layer.getSource().addFeature(featr);
+                }
+            } else {
+                layer.getSource().addFeature(featr);
+            }
         }
     }, "json")
 };
 
-initPolyLayer("/GetAreas", null, regionLayer);
+$(function () {
+    initPolyLayer("/GetAreas", null, regionLayer);
+
+    $(".adfilters").on('click', function (e) {
+        debugger
+        if (element != null) {
+            $(element).popover('destroy');
+        }
+        switch (e.currentTarget.id) {
+            case 'noagentswitch':
+                if (e.currentTarget.checked === true) {
+                    hidenoagent = false;
+                    hiddenAdSource.getFeatures().forEach(function (f) {
+                        if (!f.isagency && !(hidenewapt && f.isnew || hideoldapt && !f.isnew)) {
+                            adSource.addFeature(f);
+                            hiddenAdSource.removeFeature(f);
+                        }
+                    });
+                } else {
+                    hidenoagent = true;
+                    adSource.getFeatures().forEach(function (f) {
+                        if (!f.isagency) {
+                            hiddenAdSource.addFeature(f);
+                            adSource.removeFeature(f);
+                        }
+                    });
+                }
+                break;
+            case 'agentswitch':
+                if (e.currentTarget.checked === true) {
+                    hideagent = false;
+                    hiddenAdSource.getFeatures().forEach(function (f) {
+                        if (f.isagency && !(hidenewapt && f.isnew || hideoldapt && !f.isnew)) {
+                            adSource.addFeature(f);
+                            hiddenAdSource.removeFeature(f);
+                        }
+                    });
+                } else {
+                    hideagent = true;
+                    adSource.getFeatures().forEach(function (f) {
+                        if (f.isagency) {
+                            hiddenAdSource.addFeature(f);
+                            adSource.removeFeature(f);
+                        }
+                    });
+                }
+                break;
+            case 'newaptswitch':
+                if (e.currentTarget.checked === true) {
+                    hidenewapt = false;
+                    hiddenAdSource.getFeatures().forEach(function (f) {
+                        if (f.isnew && !(hidenoagent && !f.isagency || hideagent && f.isagency)) {
+                            adSource.addFeature(f);
+                            hiddenAdSource.removeFeature(f);
+                        }
+                    });
+                } else {
+                    hidenewapt = true;
+                    adSource.getFeatures().forEach(function (f) {
+                        if (f.isnew) {
+                            hiddenAdSource.addFeature(f);
+                            adSource.removeFeature(f);
+                        }
+                    });
+                }
+                break;
+            case 'oldaptswitch':
+                if (e.currentTarget.checked === true) {
+                    hideoldapt = false;
+                    hiddenAdSource.getFeatures().forEach(function (f) {
+                        if (!f.isnew && !(hidenoagent && !f.isagency || hideagent && f.isagency)) {
+                            adSource.addFeature(f);
+                            hiddenAdSource.removeFeature(f);
+                        }
+                    });
+                } else {
+                    hideoldapt = true;
+                    adSource.getFeatures().forEach(function (f) {
+                        if (!f.isnew) {
+                            hiddenAdSource.addFeature(f);
+                            adSource.removeFeature(f);
+                        }
+                    });
+                }
+                break;
+            default:
+                break;
+        }
+    });
+});
