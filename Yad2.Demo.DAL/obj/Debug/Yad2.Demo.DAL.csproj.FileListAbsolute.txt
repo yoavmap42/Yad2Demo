@@ -25,3 +25,4 @@ E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.xml
 E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\bin\Debug\EntityFramework.SqlServer.xml
 E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\obj\Debug\Yad2.Demo.DAL.dll
 E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\obj\Debug\Yad2.Demo.DAL.pdb
+E:\Map42\Yad2\Yad2Demo\Yad2.Demo.DAL\obj\Debug\Yad2.Demo.DAL.csprojResolveAssemblyReference.cache

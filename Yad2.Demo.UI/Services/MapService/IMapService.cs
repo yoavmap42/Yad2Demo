@@ -22,5 +22,7 @@ namespace Yad2.Demo.UI.Services.MapService
         List<SchoolsLayerViewModel> GetSchoolsByCity(string city);
 
         List<PolutionLayerViewModel> GetPolutionPoints();
+
+        List<ListingsLayerViewModel> FindAdsInPolygon(string poly);
     }
 }

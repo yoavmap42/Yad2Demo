@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +60,13 @@ namespace Yad2.Demo.BL
         public int GetListingsCountByNeighborhood(int nid)
         {
             return _db.Listings.Count(x => x.ShchunaID == nid && x.IsSold == false);
+        }
+
+        public IEnumerable<Listings> GetListingsInPolygon(string poly)
+        {
+            var result = _db.GetPointsInPolygonResult(DbGeometry.FromText(poly, 4326));
+            return result;
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Schools> GetSchoolsByCity(string code)

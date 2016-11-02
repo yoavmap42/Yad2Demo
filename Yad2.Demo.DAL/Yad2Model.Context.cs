@@ -11,6 +11,7 @@ namespace Yad2.Demo.DAL
 {
     using System;
     using System.Data.Entity;
+    using System.Data.Entity.Core.Objects;
     using System.Data.Entity.Infrastructure;
     
     public partial class Yad2Entities : DbContext
@@ -44,5 +45,23 @@ namespace Yad2.Demo.DAL
         public virtual DbSet<Schools> Schools { get; set; }
         public virtual DbSet<AirQualityStations> AirQualityStations { get; set; }
         public virtual DbSet<Restaurants> Restaurants { get; set; }
+
+        public virtual ObjectResult<Listings> GetPointsInPolygonResult(System.Data.Entity.Spatial.DbGeometry polygon)
+        {
+            var polygonParameter = polygon != null ?
+                new ObjectParameter("polygon", polygon) :
+                new ObjectParameter("polygon", typeof(System.Data.Entity.Spatial.DbGeometry));
+
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Listings>("GetPointsInPolygonResult", polygonParameter);
+        }
+
+        public virtual ObjectResult<Listings> GetPointsInPolygonResult(System.Data.Entity.Spatial.DbGeometry polygon, MergeOption mergeOption)
+        {
+            var polygonParameter = polygon != null ?
+                new ObjectParameter("polygon", polygon) :
+                new ObjectParameter("polygon", typeof(System.Data.Entity.Spatial.DbGeometry));
+
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Listings>("GetPointsInPolygonResult", mergeOption, polygonParameter);
+        }
     }
 }

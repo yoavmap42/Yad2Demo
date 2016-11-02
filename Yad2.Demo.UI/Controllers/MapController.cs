@@ -94,6 +94,27 @@ namespace Yad2.Demo.UI.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Route("FindAdsInPolygon")]
+        public HttpResponseMessage FindAdsInPolygon(string poly)
+        {
+            var response = new HttpResponseMessage();
+            List<ListingsLayerViewModel> ads;
+            try
+            {
+                ads = _mapService.FindAdsInPolygon(poly);
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.Content = new ObjectContent<string>(e.Message, new JsonMediaTypeFormatter());
+                return response;
+            }
+            response.StatusCode = HttpStatusCode.OK;
+            response.Content = new ObjectContent<List<ListingsLayerViewModel>>(ads, new JsonMediaTypeFormatter());
+            return response;
+        }
+
         [Route("GetSchoolsByCity")]
         public HttpResponseMessage GetSchoolsByCity(string city)
         {

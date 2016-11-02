@@ -272,5 +272,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GetPointsInPolygonResult" FunctionName="Yad2Model.Store.sp_GetPointsInPolygon" />
   </EntityContainerMapping>
 </Mapping>

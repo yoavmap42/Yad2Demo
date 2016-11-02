@@ -220,8 +220,15 @@ var polutionLayer = new ol.layer.Heatmap({
 });
 
 var drawLayer = new ol.layer.Vector({
-    source: drawSource
+    source: drawSource,
+    style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: '#000',
+            width: 2
+        })
+    })
 });
+
 
 var clusters = new ol.layer.Vector({
     source: clusterSource,
@@ -271,7 +278,7 @@ var drawSelect = new ol.interaction.Draw({
     type: 'Polygon',
     // condition: ol.events.condition.singleClick,
     // freehandCondition: ol.events.condition.noModifierKeys,
-   // freehand: true,
+    // freehand: true,
     style: new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: [0, 0, 255, 1]
@@ -518,10 +525,47 @@ drawSelect.on('drawend', function (e) {
     });
     drawSource.addFeature(selectionArea);
     map.getView().fit(e.feature.getGeometry(), map.getSize());
+    var postformat = new ol.format.WKT();
+    $.get("/FindAdsInPolygon", { poly: postformat.writeGeometry(e.feature.getGeometry()) }, function (result) {
+
+        var format = new ol.format.WKT();
+        var featr;
+        for (var i = 0; i < result.length; i++) {
+            featr = format.readFeature(result[i].Geometry.Geometry.WellKnownText);
+            featr.name = result[i].Name;
+            featr.id = result[i].Id;
+
+            featr.pic = result[i].Pic;
+            featr.rooms = result[i].Rooms;
+            featr.sqft = result[i].Sqft;
+            featr.address = result[i].Address;
+            featr.price = result[i].Price;
+            featr.isagency = result[i].IsAgency;
+            featr.isnew = result[i].IsNew;
+
+            featr.getGeometry();
+
+            if (hideagent && featr.isagency || hidenoagent && !featr.isagency || hidenewapt && featr.isnew || hideoldapt && !featr.isnew) {
+                hiddenAdSource.addFeature(featr);
+            } else {
+                adSource.addFeature(featr);
+            }
+        }
+        adselect.setActive(true);
+        extraselect.setActive(true);
+        $("#paneldiv").show('slow');
+    }, "json");
 });
 
 drawSelect.on('drawstart', function (e) {
+    adselect.setActive(false);
+    extraselect.setActive(false);
     drawSource.clear();
+    if (element != null) {
+        $(element).popover('destroy');
+    }
+    adSource.clear();
+    hiddenAdSource.clear();
 });
 
 //functions
@@ -606,16 +650,16 @@ $(function () {
             drawon = true;
             // clearOtherControls(this);
             select.setActive(false);
-            adselect.setActive(false);
-            extraselect.setActive(false);
+            //adselect.setActive(false);
+            //extraselect.setActive(false);
             //   selectedFeatures = [];
         } else {
             drawSource.clear();
             map.removeInteraction(drawSelect);
             drawon = false;
             select.setActive(true);
-            adselect.setActive(true);
-            extraselect.setActive(true);
+            //adselect.setActive(true);
+            //extraselect.setActive(true);
             //    resetselctedFeatures();   
         }
     });
@@ -718,7 +762,8 @@ $(function () {
                 if (e.currentTarget.checked === true) {
                     schoolSource.clear();
                     schoolLayer.setVisible(true);
-                    initPolyLayer("/GetSchoolsByCity", { city: selectedCity }, schoolLayer);
+                    initPolyLayer("/GetSchoolsByCity", { city: '5000' }, schoolLayer);
+                    //initPolyLayer("/GetSchoolsByCity", { city: selectedCity }, schoolLayer);
                 } else {
                     schoolLayer.setVisible(false);
                 }

@@ -5,6 +5,7 @@ using System.Web;
 using Yad2.Demo.UI.Models;
 using Yad2.Demo.BL;
 using System.Globalization;
+using System.Data.Entity.Spatial;
 namespace Yad2.Demo.UI.Services.MapService
 {
     public class MapService : IMapService
@@ -74,6 +75,26 @@ namespace Yad2.Demo.UI.Services.MapService
             using (var manager = new MapManager())
             {
                 return manager.GetListingsByNeighborhood(nid).Select(x => new ListingsLayerViewModel
+                {
+                    Name = x.Price.HasValue ? x.Price.Value.ToString("C0", new CultureInfo("he-IL", false)) : "0",
+                    Geometry = x.SP_GEOMETRY,
+                    Id = x.ID.ToString(),
+                    Pic = x.PicRef.HasValue ? x.PicRef.Value.ToString() : "",
+                    Rooms = x.Rooms,
+                    Price = x.Price,
+                    Sqft = x.SqMeter,
+                    Address = x.Address,
+                    IsAgency = x.IsFromAgent,
+                    IsNew = x.IsFirstHand
+                }).ToList();
+            }
+        }
+
+        public List<ListingsLayerViewModel> FindAdsInPolygon(string poly)
+        {
+            using (var manager = new MapManager())
+            {
+                return manager.GetListingsInPolygon(poly).Select(x => new ListingsLayerViewModel
                 {
                     Name = x.Price.HasValue ? x.Price.Value.ToString("C0", new CultureInfo("he-IL", false)) : "0",
                     Geometry = x.SP_GEOMETRY,

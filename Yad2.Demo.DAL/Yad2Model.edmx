@@ -475,6 +475,9 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
             </Dependent>
           </ReferentialConstraint>
         </Association>
+		<Function Name="sp_GetPointsInPolygon" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="polygon" Type="geometry" Mode="In" />
+        </Function>
         <EntityContainer Name="Yad2ModelStoreContainer">
           <EntitySet Name="AirQualityStations" EntityType="Self.AirQualityStations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Areas" EntityType="Self.Areas" Schema="dbo" store:Type="Tables" />
@@ -980,6 +983,9 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           </AssociationSet>
           <EntitySet Name="AirQualityStations" EntityType="Yad2Model.AirQualityStations" />
           <EntitySet Name="Restaurants" EntityType="Yad2Model.Restaurants" />
+		  <FunctionImport Name="GetPointsInPolygonResult" EntitySet="Listings" ReturnType="Collection(Yad2Model.Listings)">
+            <Parameter Name="polygon" Mode="In" Type="Geometry" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Areas">
           <Key>
@@ -1193,6 +1199,26 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <Property Name="Latitude" Type="Double" />
           <Property Name="SP_GEOMETRY" Type="Geometry" />
         </EntityType>
+		<ComplexType Name="sp_GetPointsInPolygon_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="StreetName" Nullable="true" MaxLength="23" />
+          <Property Type="Int32" Name="StreetID" Nullable="true" />
+          <Property Type="Int16" Name="HouseNumber" Nullable="true" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="CityCode" Nullable="true" MaxLength="14" />
+          <Property Type="Int32" Name="Price" Nullable="true" />
+          <Property Type="String" Name="Shchuna" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="ShchunaID" Nullable="true" />
+          <Property Type="Boolean" Name="IsSold" Nullable="true" />
+          <Property Type="Boolean" Name="IsFromAgent" Nullable="true" />
+          <Property Type="Boolean" Name="IsFirstHand" Nullable="true" />
+          <Property Type="Int32" Name="PicRef" Nullable="true" />
+          <Property Type="Int32" Name="Rooms" Nullable="true" />
+          <Property Type="Decimal" Name="SqMeter" Nullable="true" Precision="9" Scale="2" />
+          <Property Type="Double" Name="X" Nullable="true" />
+          <Property Type="Double" Name="Y" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1470,6 +1496,8 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+		  <FunctionImportMapping FunctionImportName="GetPointsInPolygonResult" FunctionName="Yad2Model.Store.sp_GetPointsInPolygon">
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

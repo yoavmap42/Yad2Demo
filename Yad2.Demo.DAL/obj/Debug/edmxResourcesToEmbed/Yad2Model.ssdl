@@ -470,6 +470,9 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="sp_GetPointsInPolygon" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="polygon" Type="geometry" Mode="In" />
+  </Function>
   <EntityContainer Name="Yad2ModelStoreContainer">
     <EntitySet Name="AirQualityStations" EntityType="Self.AirQualityStations" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Areas" EntityType="Self.Areas" Schema="dbo" store:Type="Tables" />
