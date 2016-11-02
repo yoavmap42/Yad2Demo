@@ -1,24 +1,30 @@
-﻿var element;
+﻿//global variables
+var element;
 var hideagent = false;
 var hidenoagent = false;
 var hidenewapt = false;
 var hideoldapt = false;
+var drawon = false;
+var selectedCity;
+var selectedNeigh;
 
-var raster = new ol.layer.Tile({
-    source: new ol.source.OSM()
-});
 
+//sources:
 var regionSource = new ol.source.Vector();
 var citySource = new ol.source.Vector();
 var neighborhoodSource = new ol.source.Vector();
 var adSource = new ol.source.Vector();
-
 var hiddenAdSource = new ol.source.Vector();
+var schoolSource = new ol.source.Vector();
+var polutionSource = new ol.source.Vector();
+var drawSource = new ol.source.Vector();
 
-var layerSwitcher = new ol.control.LayerSwitcher({
-    tipLabel: 'שכבות'
+var clusterSource = new ol.source.Cluster({
+    distance: 20,
+    source: adSource
 });
 
+//styles
 var createPointStyleFunction = function () {
     return function (feature) {
         var style = new ol.style.Style({
@@ -152,6 +158,26 @@ var createPolySelectedStyleFunction = function () {
     };
 };
 
+var createSchoolStyleFunction = function () {
+    return function (feature) {
+        var style = new ol.style.Style({
+            image: new ol.style.Icon({
+                anchor: [0.5, 1],
+                src: feature.range == 1 ? '/Content/images/schgreen.png' :
+                    (feature.range == 2 ? '/Content/images/schyellow.png' : '/Content/images/schred.png')
+            })
+        });
+        return [style];
+    };
+};
+
+var styleCache = {};
+
+//layers
+var raster = new ol.layer.Tile({
+    source: new ol.source.OSM()
+});
+
 var regionLayer = new ol.layer.Vector({
     source: regionSource,
     style: createPolyStyleFunction('24'),
@@ -176,10 +202,40 @@ var neighborhoodLayer = new ol.layer.Vector({
 var adLayer = new ol.layer.Vector({
     source: adSource,
     style: createPointStyleFunction(),
-    title: 'דירות',
     id: 5
 });
 
+var schoolLayer = new ol.layer.Vector({
+    source: schoolSource,
+    style: createSchoolStyleFunction(),
+    title: 'בתי ספר',
+    id: 6
+});
+
+var polutionLayer = new ol.layer.Heatmap({
+    source: polutionSource,
+    radius: 45,
+    blur: 65,
+    title: 'זיהום אוויר'
+});
+
+var drawLayer = new ol.layer.Vector({
+    source: drawSource
+});
+
+var clusters = new ol.layer.Vector({
+    source: clusterSource,
+    id: 4,
+    title: 'דירות למכירה',
+    style: createClusterStyleFunction()
+});
+
+//controls
+var layerSwitcher = new ol.control.LayerSwitcher({
+    tipLabel: 'שכבות'
+});
+
+//interactions
 var select = new ol.interaction.Select({
     condition: ol.events.condition.pointerMove,
     layers: [regionLayer, cityLayer, neighborhoodLayer],
@@ -188,20 +244,6 @@ var select = new ol.interaction.Select({
     toggleCondition: ol.events.condition.never,
     addCondition: ol.events.condition.altKeyOnly,
     removeCondition: ol.events.condition.shiftKeyOnly
-});
-
-var clusterSource = new ol.source.Cluster({
-    distance: 20,
-    source: adSource
-});
-
-var styleCache = {};
-
-var clusters = new ol.layer.Vector({
-    source: clusterSource,
-    id: 4,
-    title: 'דירות',
-    style: createClusterStyleFunction()
 });
 
 var adselect = new ol.interaction.Select({
@@ -214,11 +256,53 @@ var adselect = new ol.interaction.Select({
     removeCondition: ol.events.condition.shiftKeyOnly
 });
 
+var extraselect = new ol.interaction.Select({
+    condition: ol.events.condition.pointerMove,
+    layers: [schoolLayer],
+    style: createSchoolStyleFunction(),
+    wrapX: false,
+    toggleCondition: ol.events.condition.never,
+    addCondition: ol.events.condition.altKeyOnly,
+    removeCondition: ol.events.condition.shiftKeyOnly
+});
+
+var drawSelect = new ol.interaction.Draw({
+    source: drawSource,
+    type: 'Polygon',
+    // condition: ol.events.condition.singleClick,
+    // freehandCondition: ol.events.condition.noModifierKeys,
+   // freehand: true,
+    style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: [0, 0, 255, 1]
+        })
+    })
+});
+
+//overlays
 // Popup showing the position the user clicked
 var popup = new ol.Overlay({
     element: document.getElementById('popup')
 });
 
+//map
+var map = new ol.Map({
+    controls: ol.control.defaults({ attribution: false }).
+    extend([layerSwitcher]),
+    interactions: ol.interaction.defaults().extend([select, extraselect, adselect]),
+    layers: [raster, regionLayer, cityLayer, neighborhoodLayer, schoolLayer, drawLayer, clusters, polutionLayer],
+    target: 'map',
+    view: new ol.View({
+        projection: 'EPSG:4326',
+        extent: [34.2200, 29.4900, 35.6800, 33.2700],
+        center: [34.79802606, 32.08793202],
+        zoom: 12,
+        minZoom: 7,
+        maxZoom: 20
+    })
+});
+
+//events
 adselect.on('select', function (e) {
     if (e.selected.length > 0) {
 
@@ -264,100 +348,133 @@ adselect.on('select', function (e) {
     }
 });
 
-var setRadiusByAvgPrice = function (feature, resolution) {
+extraselect.on('select', function (e) {
+    if (e.selected.length > 0) {
+        var hoverexfeaturetimeout = setTimeout(function () {
+            if (e.selected.length > 0) {
+                element = popup.getElement();
 
-    var total = 0;
-    var size = feature.get('features').length;
-    for (var i = 0; i < size; i++) {
-        total += parseFloat(feature.get('features')[i].name.replace(/\D/g, ''));
+                var singleSelected = e.selected[0];
+
+                $("#popup").attr('title', 'בתי ספר');
+
+                $(element).popover('destroy');
+                popup.setPosition(singleSelected.getGeometry().B);
+
+                $(element).popover({
+                    'placement': 'auto',
+                    'offset': '0 10px',
+                    'trigger': 'focus',
+                    'animation': false,
+                    'viewport': { "selector": "#map", "padding": 5 },
+                    'container': '#map',
+                    'html': true,
+                    'content': '<p style="font-weight:800; font-size:14px">' + singleSelected.name + '</p><p>דירוג: ' + parseFloat(singleSelected.rank) + '</p>'
+                });
+                $(element).popover('show');
+
+            } else {
+                map.getOverlays().forEach(function (overlay) { map.removeOverlay(overlay) });
+            }
+        }, 500);
     }
-    var avg = total / size;
-    var radius = size / 4 * (avg * 0.000003);
-    return radius;
-}
-
-var map = new ol.Map({
-    controls: ol.control.defaults({ attribution: false }).
-    extend([layerSwitcher]),
-    interactions: ol.interaction.defaults().extend([select, adselect]),
-    layers: [raster, regionLayer, cityLayer, neighborhoodLayer, clusters],
-    target: 'map',
-    view: new ol.View({
-        projection: 'EPSG:4326',
-        extent: [34.2200, 29.4900, 35.6800, 33.2700],
-        center: [34.79802606, 32.08793202],
-        zoom: 12,
-        minZoom: 7,
-        maxZoom: 20
-    })
 });
 
-map.addOverlay(popup);
-
 map.on('singleclick', function (evt) {
-    if (element != null) {
-        $(element).popover('destroy');
-    }
-    map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-        switch (feature.layerid) {
-            case 1:
-                $("#paneldiv").hide('slow');
-                neighborhoodSource.clear();
-                citySource.clear();
-                initPolyLayer("/GetCitiesByArea", { area: 1 }, cityLayer);
-                layer.getSource().forEachFeature(function (f) {
-                    if (f != feature && f.getStyle() == emptyImgStyle) {
-                        f.setStyle(f.originalStyle);
-                    }
-                });
-                feature.originalStyle = feature.getStyle();
-                map.getView().fit(feature.getGeometry(), map.getSize());
-                map.getView().setZoom(13);
-                feature.setStyle(emptyImgStyle);
-                break;
-            case 2:
-                $("#paneldiv").hide('slow');
-                adSource.clear();
-                hiddenAdSource.clear();
-                neighborhoodSource.clear();
-                hideagent = false; hidenoagent = false; hidenewapt = false; hideoldapt = false;
-
-                $(".adfilters").each(function () {
-                    if (this.checked == false) {
-                        $(this).trigger('click');
-                    }
-                });
-
-                initPolyLayer("/GetNeighborhoodsByCity", { city: feature.id }, neighborhoodLayer);
-                layer.getSource().forEachFeature(function (f) {
-                    if (f != feature && f.getStyle() == emptyImgStyle) {
-                        f.setStyle(f.originalStyle);
-                    }
-                });
-                feature.originalStyle = feature.getStyle();
-                map.getView().fit(feature.getGeometry(), map.getSize());
-                map.getView().setZoom(14);
-                feature.setStyle(emptyImgStyle);
-                break;
-            case 3:
-                adSource.clear();
-                hiddenAdSource.clear();
-                initPolyLayer("/GetAdsByNeighborhood", { nid: feature.id }, adLayer);
-
-                layer.getSource().forEachFeature(function (f) {
-                    if (f != feature && f.getStyle() == emptyImgStyle) {
-                        f.setStyle(f.originalStyle);
-                    }
-                });
-                feature.originalStyle = feature.getStyle();
-                map.getView().fit(feature.getGeometry(), map.getSize());
-                feature.setStyle(emptyImgStyle);
-                $("#paneldiv").show('slow');
-                break;
-            default:
-                break;
+    if (!drawon) {
+        if (element != null) {
+            $(element).popover('destroy');
         }
-    });
+        map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+            switch (feature.layerid) {
+                case 1:
+                    $("#paneldiv").hide('slow');
+                    neighborhoodSource.clear();
+                    citySource.clear();
+                    initPolyLayer("/GetCitiesByArea", { area: 1 }, cityLayer);
+                    layer.getSource().forEachFeature(function (f) {
+                        if (f != feature && f.getStyle() == emptyImgStyle) {
+                            f.setStyle(f.originalStyle);
+                        }
+                    });
+                    feature.originalStyle = feature.getStyle();
+                    map.getView().fit(feature.getGeometry(), map.getSize());
+                    map.getView().setZoom(13);
+                    feature.setStyle(emptyImgStyle);
+                    break;
+                case 2:
+                    $("#paneldiv").hide('slow');
+                    schoolSource.clear();
+                    adSource.clear();
+                    hiddenAdSource.clear();
+                    neighborhoodSource.clear();
+                    hideagent = false; hidenoagent = false; hidenewapt = false; hideoldapt = false;
+
+                    $(".adfilters").each(function () {
+                        if (this.checked == false) {
+                            $(this).trigger('click');
+                        }
+                    });
+
+                    $(".extrafilters").each(function () {
+                        if (this.checked == true) {
+                            $(this).trigger('click');
+                        }
+                    });
+
+                    selectedCity = feature.id;
+
+                    initPolyLayer("/GetNeighborhoodsByCity", { city: feature.id }, neighborhoodLayer);
+                    layer.getSource().forEachFeature(function (f) {
+                        if (f != feature && f.getStyle() == emptyImgStyle) {
+                            f.setStyle(f.originalStyle);
+                        }
+                    });
+                    feature.originalStyle = feature.getStyle();
+                    map.getView().fit(feature.getGeometry(), map.getSize());
+                    map.getView().setZoom(14);
+                    feature.setStyle(emptyImgStyle);
+                    break;
+                case 3:
+                    adSource.clear();
+                    hiddenAdSource.clear();
+                    selectedNeigh = feature.id;
+
+                    initPolyLayer("/GetAdsByNeighborhood", { nid: feature.id }, adLayer);
+
+                    layer.getSource().forEachFeature(function (f) {
+                        if (f != feature && f.getStyle() == emptyImgStyle) {
+                            f.setStyle(f.originalStyle);
+                        }
+                    });
+                    feature.originalStyle = feature.getStyle();
+
+
+                    var duration = 1500;
+                    var start = +new Date();
+                    var pan = ol.animation.pan({
+                        duration: duration,
+                        source: /** @type {ol.Coordinate} */ (map.getView().getCenter()),
+                        start: start
+                    });
+                    var bounce = ol.animation.bounce({
+                        duration: duration,
+                        resolution: 1.5 * map.getView().getResolution(),
+                        start: start
+                    });
+                    map.beforeRender(pan, bounce);
+                    // map.getView().fit(feature.getGeometry(), map.getSize());
+                    map.getView().setCenter(feature.getGeometry().B);
+
+
+                    feature.setStyle(emptyImgStyle);
+                    $("#paneldiv").show('slow');
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
 });
 
 //map.getView().on('change:resolution', function (evt) {
@@ -395,6 +512,19 @@ map.on('singleclick', function (evt) {
 //    }
 //});
 
+drawSelect.on('drawend', function (e) {
+    var selectionArea = new ol.Feature({
+        geometry: e.feature.getGeometry()
+    });
+    drawSource.addFeature(selectionArea);
+    map.getView().fit(e.feature.getGeometry(), map.getSize());
+});
+
+drawSelect.on('drawstart', function (e) {
+    drawSource.clear();
+});
+
+//functions
 var initPolyLayer = function (action, params, layer) {
     $.get(action, params, function (result) {
         var format = new ol.format.WKT();
@@ -411,30 +541,85 @@ var initPolyLayer = function (action, params, layer) {
             featr.borderWidth = result[i].BorderWidth;
             featr.labelBorderWidth = result[i].LabelBorderWidth;
             featr.layerid = layer.U.id;
-            featr.pic = result[i].Pic;
-            featr.rooms = result[i].Rooms;
-            featr.sqft = result[i].Sqft;
-            featr.address = result[i].Address;
-            featr.price = result[i].Price;
-            featr.isagency = result[i].IsAgency;
-            featr.isnew = result[i].IsNew;
+
+            if (layer == adLayer) {
+                featr.pic = result[i].Pic;
+                featr.rooms = result[i].Rooms;
+                featr.sqft = result[i].Sqft;
+                featr.address = result[i].Address;
+                featr.price = result[i].Price;
+                featr.isagency = result[i].IsAgency;
+                featr.isnew = result[i].IsNew;
+            }
+
+            if (layer == schoolLayer) {
+                featr.rank = result[i].Rank;
+                featr.range = result[i].Rank > 7 ? 1 : (result[i].Rank > 3 ? 2 : 3);
+            }
+
+            if (layer == polutionLayer) {
+                featr.level = result[i].Level;
+
+                var pointFeature = new ol.Feature({
+                    geometry: featr.getGeometry(),
+                    weight: result[i].Level / 10
+                });
+                layer.getSource().addFeature(pointFeature);
+            }
 
             featr.getGeometry();
+
             if (layer == adLayer) {
                 if (hideagent && featr.isagency || hidenoagent && !featr.isagency || hidenewapt && featr.isnew || hideoldapt && !featr.isnew) {
                     hiddenAdSource.addFeature(featr);
                 } else {
                     layer.getSource().addFeature(featr);
                 }
-            } else {
+            } else if (layer != polutionLayer) {
                 layer.getSource().addFeature(featr);
             }
         }
     }, "json")
 };
 
+var setRadiusByAvgPrice = function (feature, resolution) {
+
+    var total = 0;
+    var size = feature.get('features').length;
+    for (var i = 0; i < size; i++) {
+        total += parseFloat(feature.get('features')[i].name.replace(/\D/g, ''));
+    }
+    var avg = total / size;
+    var radius = size / 4 * (avg * 0.000003);
+    return radius;
+}
+
+//initialization
 $(function () {
+    map.addOverlay(popup);
     initPolyLayer("/GetAreas", null, regionLayer);
+
+    $("#olSelectPolygonControl").on('click', function (e) {
+        $(this).toggleClass("olControlItemActive");
+        if ($(this).hasClass('olControlItemActive')) {
+            map.addInteraction(drawSelect);
+            drawon = true;
+            // clearOtherControls(this);
+            select.setActive(false);
+            adselect.setActive(false);
+            extraselect.setActive(false);
+            //   selectedFeatures = [];
+        } else {
+            drawSource.clear();
+            map.removeInteraction(drawSelect);
+            drawon = false;
+            select.setActive(true);
+            adselect.setActive(true);
+            extraselect.setActive(true);
+            //    resetselctedFeatures();   
+        }
+    });
+
 
     $(".adfilters").on('click', function (e) {
         debugger
@@ -516,6 +701,56 @@ $(function () {
                             adSource.removeFeature(f);
                         }
                     });
+                }
+                break;
+            default:
+                break;
+        }
+    });
+
+    $(".extrafilters").on('click', function (e) {
+        debugger
+        if (element != null) {
+            $(element).popover('destroy');
+        }
+        switch (e.currentTarget.id) {
+            case 'schoolswitch':
+                if (e.currentTarget.checked === true) {
+                    schoolSource.clear();
+                    schoolLayer.setVisible(true);
+                    initPolyLayer("/GetSchoolsByCity", { city: selectedCity }, schoolLayer);
+                } else {
+                    schoolLayer.setVisible(false);
+                }
+                break;
+            case 'resturantswitch':
+                if (e.currentTarget.checked === true) {
+
+                } else {
+
+                }
+                break;
+            case 'soldaptswitch':
+                if (e.currentTarget.checked === true) {
+
+                } else {
+
+                }
+                break;
+            case 'avgpriceswitch':
+                if (e.currentTarget.checked === true) {
+
+                } else {
+
+                }
+                break;
+            case 'polutionswitch':
+                if (e.currentTarget.checked === true) {
+                    polutionSource.clear();
+                    polutionLayer.setVisible(true);
+                    initPolyLayer("/GetPolutionPoints", null, polutionLayer);
+                } else {
+                    polutionLayer.setVisible(false);
                 }
                 break;
             default:

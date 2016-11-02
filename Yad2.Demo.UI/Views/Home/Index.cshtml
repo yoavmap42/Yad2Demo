@@ -1,5 +1,6 @@
 ﻿
 <div id="paneldiv">
+
     <ul class="list-group">
         <li class="list-group-item" style="display:inline-block;">
             &nbsp;&nbsp;&nbsp;ללא תיווך
@@ -33,35 +34,35 @@
         <li class="list-group-item-s" style="display:inline-block;">
             &nbsp;&nbsp;&nbsp;בתי ספר
             <div class="material-switch pull-right">
-                <input id="schoolswitch" name="schoolswitch" type="checkbox">
+                <input class="extrafilters" id="schoolswitch" name="schoolswitch" type="checkbox">
                 <label for="schoolswitch" class="label-schools label-extras"></label>
             </div>
         </li>
         <li class="list-group-item-s" style="display:inline-block">
             &nbsp;&nbsp;&nbsp;מסעדות
             <div class="material-switch pull-right">
-                <input id="resturantswitch" name="resturantswitch" type="checkbox">
+                <input class="extrafilters" id="resturantswitch" name="resturantswitch" type="checkbox">
                 <label for="resturantswitch" class="label-resturants label-extras"></label>
             </div>
         </li>
         <li class="list-group-item-s" style="display:inline-block">
             &nbsp;&nbsp;&nbsp;דירות שנמכרו
             <div class="material-switch pull-right">
-                <input id="soldaptswitch" name="soldaptswitch" type="checkbox">
+                <input class="extrafilters" id="soldaptswitch" name="soldaptswitch" type="checkbox">
                 <label for="soldaptswitch" class="label-soldapt label-extras"></label>
             </div>
         </li>
         <li class="list-group-item-s" style="display:inline-block">
             &nbsp;&nbsp;&nbsp;מחיר חציוני
             <div class="material-switch pull-right">
-                <input id="avgpriceswitch" name="avgpriceswitch" type="checkbox">
+                <input class="extrafilters" id="avgpriceswitch" name="avgpriceswitch" type="checkbox">
                 <label for="avgpriceswitch" class="label-avgprice label-extras"></label>
             </div>
         </li>
         <li class="list-group-item-s" style="display:inline-block">
             &nbsp;&nbsp;&nbsp;זיהום אוויר
             <div class="material-switch pull-right">
-                <input id="polutionswitch" name="polutionswitch" type="checkbox">
+                <input class="extrafilters" id="polutionswitch" name="polutionswitch" type="checkbox">
                 <label for="polutionswitch" class="label-polution label-extras"></label>
             </div>
         </li>
@@ -70,7 +71,12 @@
 
 </div>
 
-<div id="map" class="map" style="margin-top:20px; position:relative; overflow:hidden;"></div>
+<div id="map" class="map" style="margin-top:20px; position:relative; overflow:hidden;">
+    <span id="controlpanel" class="olControlPanel">
+        <span id="olSelectPolygonControl" class="olControlItem" title="בחירה ידנית">
+        </span>
+    </span>
+</div>
 
 <img src="" />
 <div style="display: none;">

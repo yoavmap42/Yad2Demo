@@ -31,8 +31,6 @@ namespace Yad2.Demo.DAL
         public virtual DbSet<MapaStreet> MapaStreet { get; set; }
         public virtual DbSet<MapiCity> MapiCity { get; set; }
         public virtual DbSet<MapiStreet> MapiStreet { get; set; }
-        public virtual DbSet<Restaurants> Restaurants { get; set; }
-        public virtual DbSet<Schools> Schools { get; set; }
         public virtual DbSet<Yad2_TA_BuildingPoints_Updated> Yad2_TA_BuildingPoints_Updated { get; set; }
         public virtual DbSet<Yad2Area> Yad2Area { get; set; }
         public virtual DbSet<Yad2City> Yad2City { get; set; }
@@ -43,5 +41,8 @@ namespace Yad2.Demo.DAL
         public virtual DbSet<Neighborhoods> Neighborhoods { get; set; }
         public virtual DbSet<Streets> Streets { get; set; }
         public virtual DbSet<Listings> Listings { get; set; }
+        public virtual DbSet<Schools> Schools { get; set; }
+        public virtual DbSet<AirQualityStations> AirQualityStations { get; set; }
+        public virtual DbSet<Restaurants> Restaurants { get; set; }
     }
 }

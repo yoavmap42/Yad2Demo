@@ -89,6 +89,34 @@ namespace Yad2.Demo.UI.Services.MapService
             }
         }
 
+        public List<SchoolsLayerViewModel> GetSchoolsByCity(string city)
+        {
+            using (var manager = new MapManager())
+            {
+                return manager.GetSchoolsByCity(city).Select(x => new SchoolsLayerViewModel
+                {
+                    Name = x.Name,
+                    Geometry = x.SP_GEOMETRY,
+                    Id = x.Id.ToString(),
+                    Rank = x.SchoolRank.HasValue ? x.SchoolRank.Value : 0
+                }).ToList();
+            }
+        }
+
+        public List<PolutionLayerViewModel> GetPolutionPoints()
+        {
+            using (var manager = new MapManager())
+            {
+                return manager.GetPolutionPoints().Select(x => new PolutionLayerViewModel
+                {
+                    Name = x.Station_Name,
+                    Geometry = x.SP_GEOMETRY,
+                    Id = x.ID.ToString(),
+                    Level = x.Pollution_Level.Value
+                }).ToList();
+            }
+        }
+
         public List<PolyLayerViewModel> GetCities()
         {
             using (var manager = new MapManager())

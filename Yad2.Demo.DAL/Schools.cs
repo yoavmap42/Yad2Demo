@@ -14,15 +14,16 @@ namespace Yad2.Demo.DAL
     
     public partial class Schools
     {
-        public short objid { get; set; }
-        public string institutename { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
         public Nullable<int> SchoolRank { get; set; }
-        public string cityname { get; set; }
-        public Nullable<int> CityCode { get; set; }
-        public string Shchuna { get; set; }
+        public string CityCode { get; set; }
         public Nullable<int> ShchunaID { get; set; }
         public Nullable<double> X { get; set; }
         public Nullable<double> Y { get; set; }
         public System.Data.Entity.Spatial.DbGeometry SP_GEOMETRY { get; set; }
+    
+        public virtual Municipalities Municipalities { get; set; }
+        public virtual Neighborhoods Neighborhoods { get; set; }
     }
 }

@@ -33,6 +33,17 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <Property Name="Gush" Type="nvarchar" MaxLength="20" />
           <Property Name="Chelka" Type="nvarchar" MaxLength="20" />
         </EntityType>
+        <EntityType Name="AirQualityStations">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="smallint" Nullable="false" />
+          <Property Name="Station_Name" Type="varchar" MaxLength="10" />
+          <Property Name="Pollution_Level" Type="float" />
+          <Property Name="X" Type="float" />
+          <Property Name="Y" Type="float" />
+          <Property Name="SP_GEOMETRY" Type="geometry" />
+        </EntityType>
         <EntityType Name="Areas">
           <Key>
             <PropertyRef Name="ID" />
@@ -150,7 +161,11 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="CityName" Type="varchar" MaxLength="100" />
+          <Property Name="CityCode" Type="varchar" MaxLength="20" />
+          <Property Name="SchunaName" Type="varchar" MaxLength="50" />
+          <Property Name="SchunaID" Type="int" />
           <Property Name="Name" Type="varchar" MaxLength="100" />
           <Property Name="Type" Type="varchar" MaxLength="100" />
           <Property Name="Longitude" Type="float" />
@@ -159,14 +174,12 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
         </EntityType>
         <EntityType Name="Schools">
           <Key>
-            <PropertyRef Name="objid" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="objid" Type="smallint" Nullable="false" />
-          <Property Name="institutename" Type="varchar" MaxLength="39" />
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="39" />
           <Property Name="SchoolRank" Type="int" />
-          <Property Name="cityname" Type="varchar" MaxLength="11" />
-          <Property Name="CityCode" Type="int" />
-          <Property Name="Shchuna" Type="varchar" MaxLength="100" />
+          <Property Name="CityCode" Type="varchar" MaxLength="14" />
           <Property Name="ShchunaID" Type="int" />
           <Property Name="X" Type="float" />
           <Property Name="Y" Type="float" />
@@ -414,6 +427,30 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Schools_Neighborhoods">
+          <End Role="Neighborhoods" Type="Self.Neighborhoods" Multiplicity="0..1" />
+          <End Role="Schools" Type="Self.Schools" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Neighborhoods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schools">
+              <PropertyRef Name="ShchunaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schools_Schools">
+          <End Role="Municipalities" Type="Self.Municipalities" Multiplicity="0..1" />
+          <End Role="Schools" Type="Self.Schools" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Municipalities">
+              <PropertyRef Name="MunicipalCode" />
+            </Principal>
+            <Dependent Role="Schools">
+              <PropertyRef Name="CityCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Streets_Municipalities">
           <End Role="Municipalities" Type="Self.Municipalities" Multiplicity="0..1" />
           <End Role="Streets" Type="Self.Streets" Multiplicity="*" />
@@ -439,6 +476,7 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="Yad2ModelStoreContainer">
+          <EntitySet Name="AirQualityStations" EntityType="Self.AirQualityStations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Areas" EntityType="Self.Areas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="iGoCity" EntityType="Self.iGoCity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="iGoStreet" EntityType="Self.iGoStreet" Schema="dbo" store:Type="Tables" />
@@ -537,6 +575,14 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
             <End Role="Areas" EntitySet="Areas" />
             <End Role="Municipalities" EntitySet="Municipalities" />
           </AssociationSet>
+          <AssociationSet Name="FK_Schools_Neighborhoods" Association="Self.FK_Schools_Neighborhoods">
+            <End Role="Neighborhoods" EntitySet="Neighborhoods" />
+            <End Role="Schools" EntitySet="Schools" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schools_Schools" Association="Self.FK_Schools_Schools">
+            <End Role="Municipalities" EntitySet="Municipalities" />
+            <End Role="Schools" EntitySet="Schools" />
+          </AssociationSet>
           <AssociationSet Name="FK_Streets_Municipalities" Association="Self.FK_Streets_Municipalities">
             <End Role="Municipalities" EntitySet="Municipalities" />
             <End Role="Streets" EntitySet="Streets" />
@@ -609,32 +655,6 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <Property Name="MapiCityCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MapiCity" Relationship="Self.FK_MapiStreet_MapiCity" FromRole="MapiStreet" ToRole="MapiCity" />
           <NavigationProperty Name="AddressMaster" Relationship="Self.FK_AddressMaster_MapiStreet" FromRole="MapiStreet" ToRole="AddressMaster" />
-        </EntityType>
-        <EntityType Name="Restaurants">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Longitude" Type="Double" />
-          <Property Name="Latitude" Type="Double" />
-          <Property Name="SP_GEOMETRY" Type="Geometry" />
-        </EntityType>
-        <EntityType Name="Schools">
-          <Key>
-            <PropertyRef Name="objid" />
-          </Key>
-          <Property Name="objid" Type="Int16" Nullable="false" />
-          <Property Name="institutename" Type="String" MaxLength="39" FixedLength="false" Unicode="false" />
-          <Property Name="SchoolRank" Type="Int32" />
-          <Property Name="cityname" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
-          <Property Name="CityCode" Type="Int32" />
-          <Property Name="Shchuna" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ShchunaID" Type="Int32" />
-          <Property Name="X" Type="Double" />
-          <Property Name="Y" Type="Double" />
-          <Property Name="SP_GEOMETRY" Type="Geometry" />
         </EntityType>
         <EntityType Name="Yad2_TA_BuildingPoints_Updated">
           <Key>
@@ -875,8 +895,6 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <EntitySet Name="MapaStreet" EntityType="Self.MapaStreet" />
           <EntitySet Name="MapiCity" EntityType="Self.MapiCity" />
           <EntitySet Name="MapiStreet" EntityType="Self.MapiStreet" />
-          <EntitySet Name="Restaurants" EntityType="Self.Restaurants" />
-          <EntitySet Name="Schools" EntityType="Self.Schools" />
           <EntitySet Name="Yad2_TA_BuildingPoints_Updated" EntityType="Self.Yad2_TA_BuildingPoints_Updated" />
           <EntitySet Name="Yad2Area" EntityType="Self.Yad2Area" />
           <EntitySet Name="Yad2City" EntityType="Self.Yad2City" />
@@ -951,6 +969,17 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
             <End Role="Streets" EntitySet="Streets" />
             <End Role="Listings" EntitySet="Listings" />
           </AssociationSet>
+          <EntitySet Name="Schools" EntityType="Yad2Model.Schools" />
+          <AssociationSet Name="FK_Schools_Schools" Association="Yad2Model.FK_Schools_Schools">
+            <End Role="Municipalities" EntitySet="Municipalities" />
+            <End Role="Schools" EntitySet="Schools" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schools_Neighborhoods" Association="Yad2Model.FK_Schools_Neighborhoods">
+            <End Role="Neighborhoods" EntitySet="Neighborhoods" />
+            <End Role="Schools" EntitySet="Schools" />
+          </AssociationSet>
+          <EntitySet Name="AirQualityStations" EntityType="Yad2Model.AirQualityStations" />
+          <EntitySet Name="Restaurants" EntityType="Yad2Model.Restaurants" />
         </EntityContainer>
         <EntityType Name="Areas">
           <Key>
@@ -979,6 +1008,7 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <NavigationProperty Name="Areas" Relationship="Yad2Model.FK_Municipalities_Areas" FromRole="Municipalities" ToRole="Areas" />
           <NavigationProperty Name="Streets" Relationship="Yad2Model.FK_Streets_Municipalities" FromRole="Municipalities" ToRole="Streets" />
           <NavigationProperty Name="Listings" Relationship="Yad2Model.FK_Listings_Municipalities" FromRole="Municipalities" ToRole="Listings" />
+          <NavigationProperty Name="Schools" Relationship="Yad2Model.FK_Schools_Schools" FromRole="Municipalities" ToRole="Schools" />
         </EntityType>
         <EntityType Name="Neighborhoods">
           <Key>
@@ -995,6 +1025,7 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
           <Property Name="Latitude" Type="Double" />
           <Property Name="SP_GEOMETRY" Type="Geometry" />
           <NavigationProperty Name="Listings" Relationship="Yad2Model.FK_Listings_Neighborhoods" FromRole="Neighborhoods" ToRole="Listings" />
+          <NavigationProperty Name="Schools" Relationship="Yad2Model.FK_Schools_Neighborhoods" FromRole="Neighborhoods" ToRole="Schools" />
         </EntityType>
         <EntityType Name="Streets">
           <Key>
@@ -1097,6 +1128,71 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Schools">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="39" FixedLength="false" Unicode="false" />
+          <Property Name="SchoolRank" Type="Int32" />
+          <Property Name="CityCode" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
+          <Property Name="ShchunaID" Type="Int32" />
+          <Property Name="X" Type="Double" />
+          <Property Name="Y" Type="Double" />
+          <Property Name="SP_GEOMETRY" Type="Geometry" />
+          <NavigationProperty Name="Municipalities" Relationship="Yad2Model.FK_Schools_Schools" FromRole="Schools" ToRole="Municipalities" />
+          <NavigationProperty Name="Neighborhoods" Relationship="Yad2Model.FK_Schools_Neighborhoods" FromRole="Schools" ToRole="Neighborhoods" />
+        </EntityType>
+        <Association Name="FK_Schools_Schools">
+          <End Type="Yad2Model.Municipalities" Role="Municipalities" Multiplicity="0..1" />
+          <End Type="Yad2Model.Schools" Role="Schools" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Municipalities">
+              <PropertyRef Name="MunicipalCode" />
+            </Principal>
+            <Dependent Role="Schools">
+              <PropertyRef Name="CityCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schools_Neighborhoods">
+          <End Type="Yad2Model.Neighborhoods" Role="Neighborhoods" Multiplicity="0..1" />
+          <End Type="Yad2Model.Schools" Role="Schools" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Neighborhoods">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schools">
+              <PropertyRef Name="ShchunaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AirQualityStations">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" />
+          <Property Name="Station_Name" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Pollution_Level" Type="Double" />
+          <Property Name="X" Type="Double" />
+          <Property Name="Y" Type="Double" />
+          <Property Name="SP_GEOMETRY" Type="Geometry" />
+        </EntityType>
+        <EntityType Name="Restaurants">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="CityName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CityCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SchunaName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SchunaID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="SP_GEOMETRY" Type="Geometry" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1156,34 +1252,6 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
                 <ScalarProperty Name="MapiStreetCode" ColumnName="MapiStreetCode" />
                 <ScalarProperty Name="MapiStreetName" ColumnName="MapiStreetName" />
                 <ScalarProperty Name="MapiCityCode" ColumnName="MapiCityCode" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Restaurants">
-            <EntityTypeMapping TypeName="Yad2Model.Restaurants">
-              <MappingFragment StoreEntitySet="Restaurants">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Schools">
-            <EntityTypeMapping TypeName="Yad2Model.Schools">
-              <MappingFragment StoreEntitySet="Schools">
-                <ScalarProperty Name="objid" ColumnName="objid" />
-                <ScalarProperty Name="institutename" ColumnName="institutename" />
-                <ScalarProperty Name="SchoolRank" ColumnName="SchoolRank" />
-                <ScalarProperty Name="cityname" ColumnName="cityname" />
-                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
-                <ScalarProperty Name="Shchuna" ColumnName="Shchuna" />
-                <ScalarProperty Name="ShchunaID" ColumnName="ShchunaID" />
-                <ScalarProperty Name="X" ColumnName="X" />
-                <ScalarProperty Name="Y" ColumnName="Y" />
-                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1356,6 +1424,48 @@ warning 6002: The table/view 'Yad2.dbo.AddressMaster' does not have a primary ke
                 <ScalarProperty Name="StreetID" ColumnName="StreetID" />
                 <ScalarProperty Name="StreetName" ColumnName="StreetName" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schools">
+            <EntityTypeMapping TypeName="Yad2Model.Schools">
+              <MappingFragment StoreEntitySet="Schools">
+                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
+                <ScalarProperty Name="Y" ColumnName="Y" />
+                <ScalarProperty Name="X" ColumnName="X" />
+                <ScalarProperty Name="ShchunaID" ColumnName="ShchunaID" />
+                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+                <ScalarProperty Name="SchoolRank" ColumnName="SchoolRank" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AirQualityStations">
+            <EntityTypeMapping TypeName="Yad2Model.AirQualityStations">
+              <MappingFragment StoreEntitySet="AirQualityStations">
+                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
+                <ScalarProperty Name="Y" ColumnName="Y" />
+                <ScalarProperty Name="X" ColumnName="X" />
+                <ScalarProperty Name="Pollution_Level" ColumnName="Pollution_Level" />
+                <ScalarProperty Name="Station_Name" ColumnName="Station_Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Restaurants">
+            <EntityTypeMapping TypeName="Yad2Model.Restaurants">
+              <MappingFragment StoreEntitySet="Restaurants">
+                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SchunaID" ColumnName="SchunaID" />
+                <ScalarProperty Name="SchunaName" ColumnName="SchunaName" />
+                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

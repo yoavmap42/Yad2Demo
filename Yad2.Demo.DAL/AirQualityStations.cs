@@ -12,17 +12,13 @@ namespace Yad2.Demo.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class Restaurants
+    public partial class AirQualityStations
     {
-        public int ID { get; set; }
-        public string CityName { get; set; }
-        public string CityCode { get; set; }
-        public string SchunaName { get; set; }
-        public Nullable<int> SchunaID { get; set; }
-        public string Name { get; set; }
-        public string Type { get; set; }
-        public Nullable<double> Longitude { get; set; }
-        public Nullable<double> Latitude { get; set; }
+        public short ID { get; set; }
+        public string Station_Name { get; set; }
+        public Nullable<double> Pollution_Level { get; set; }
+        public Nullable<double> X { get; set; }
+        public Nullable<double> Y { get; set; }
         public System.Data.Entity.Spatial.DbGeometry SP_GEOMETRY { get; set; }
     }
 }

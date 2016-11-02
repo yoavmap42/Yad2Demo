@@ -11,8 +11,6 @@
         <EntityTypeShape EntityType="Yad2Model.MapaStreet" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="Yad2Model.MapiCity" Width="1.5" PointX="3" PointY="13.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Yad2Model.MapiStreet" Width="1.5" PointX="3" PointY="16.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Yad2Model.Restaurants" Width="1.5" PointX="5.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Yad2Model.Schools" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Yad2Model.Yad2_TA_BuildingPoints_Updated" Width="1.5" PointX="13.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Yad2Model.Yad2Area" Width="1.5" PointX="3" PointY="19.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Yad2Model.Yad2City" Width="1.5" PointX="3" PointY="21.5" IsExpanded="true" />
@@ -39,6 +37,11 @@
         <AssociationConnector Association="Yad2Model.FK_Listings_Municipalities" />
         <AssociationConnector Association="Yad2Model.FK_Listings_Neighborhoods" />
         <AssociationConnector Association="Yad2Model.FK_Listings_Streets" />
+        <EntityTypeShape EntityType="Yad2Model.Schools" Width="1.5" PointX="23.125" PointY="2.25" />
+        <AssociationConnector Association="Yad2Model.FK_Schools_Schools" />
+        <AssociationConnector Association="Yad2Model.FK_Schools_Neighborhoods" />
+        <EntityTypeShape EntityType="Yad2Model.AirQualityStations" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Yad2Model.Restaurants" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

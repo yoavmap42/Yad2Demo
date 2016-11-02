@@ -18,6 +18,7 @@ namespace Yad2.Demo.DAL
         {
             this.Streets = new HashSet<Streets>();
             this.Listings = new HashSet<Listings>();
+            this.Schools = new HashSet<Schools>();
         }
     
         public string MunicipalName { get; set; }
@@ -32,5 +33,6 @@ namespace Yad2.Demo.DAL
         public virtual Areas Areas { get; set; }
         public virtual ICollection<Streets> Streets { get; set; }
         public virtual ICollection<Listings> Listings { get; set; }
+        public virtual ICollection<Schools> Schools { get; set; }
     }
 }

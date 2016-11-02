@@ -17,6 +17,7 @@ namespace Yad2.Demo.DAL
         public Neighborhoods()
         {
             this.Listings = new HashSet<Listings>();
+            this.Schools = new HashSet<Schools>();
         }
     
         public int ID { get; set; }
@@ -31,5 +32,6 @@ namespace Yad2.Demo.DAL
         public System.Data.Entity.Spatial.DbGeometry SP_GEOMETRY { get; set; }
     
         public virtual ICollection<Listings> Listings { get; set; }
+        public virtual ICollection<Schools> Schools { get; set; }
     }
 }

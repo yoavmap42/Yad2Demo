@@ -57,34 +57,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Restaurants">
-      <EntityTypeMapping TypeName="Yad2Model.Restaurants">
-        <MappingFragment StoreEntitySet="Restaurants">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Type" ColumnName="Type" />
-          <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-          <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-          <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Schools">
-      <EntityTypeMapping TypeName="Yad2Model.Schools">
-        <MappingFragment StoreEntitySet="Schools">
-          <ScalarProperty Name="objid" ColumnName="objid" />
-          <ScalarProperty Name="institutename" ColumnName="institutename" />
-          <ScalarProperty Name="SchoolRank" ColumnName="SchoolRank" />
-          <ScalarProperty Name="cityname" ColumnName="cityname" />
-          <ScalarProperty Name="CityCode" ColumnName="CityCode" />
-          <ScalarProperty Name="Shchuna" ColumnName="Shchuna" />
-          <ScalarProperty Name="ShchunaID" ColumnName="ShchunaID" />
-          <ScalarProperty Name="X" ColumnName="X" />
-          <ScalarProperty Name="Y" ColumnName="Y" />
-          <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Yad2_TA_BuildingPoints_Updated">
       <EntityTypeMapping TypeName="Yad2Model.Yad2_TA_BuildingPoints_Updated">
         <MappingFragment StoreEntitySet="Yad2_TA_BuildingPoints_Updated">
@@ -254,6 +226,48 @@
           <ScalarProperty Name="StreetID" ColumnName="StreetID" />
           <ScalarProperty Name="StreetName" ColumnName="StreetName" />
           <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Schools">
+      <EntityTypeMapping TypeName="Yad2Model.Schools">
+        <MappingFragment StoreEntitySet="Schools">
+          <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
+          <ScalarProperty Name="Y" ColumnName="Y" />
+          <ScalarProperty Name="X" ColumnName="X" />
+          <ScalarProperty Name="ShchunaID" ColumnName="ShchunaID" />
+          <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+          <ScalarProperty Name="SchoolRank" ColumnName="SchoolRank" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AirQualityStations">
+      <EntityTypeMapping TypeName="Yad2Model.AirQualityStations">
+        <MappingFragment StoreEntitySet="AirQualityStations">
+          <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
+          <ScalarProperty Name="Y" ColumnName="Y" />
+          <ScalarProperty Name="X" ColumnName="X" />
+          <ScalarProperty Name="Pollution_Level" ColumnName="Pollution_Level" />
+          <ScalarProperty Name="Station_Name" ColumnName="Station_Name" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Restaurants">
+      <EntityTypeMapping TypeName="Yad2Model.Restaurants">
+        <MappingFragment StoreEntitySet="Restaurants">
+          <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
+          <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+          <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="SchunaID" ColumnName="SchunaID" />
+          <ScalarProperty Name="SchunaName" ColumnName="SchunaName" />
+          <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>

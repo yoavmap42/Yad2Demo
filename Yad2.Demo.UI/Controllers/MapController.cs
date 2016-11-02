@@ -94,6 +94,46 @@ namespace Yad2.Demo.UI.Controllers
             return response;
         }
 
+        [Route("GetSchoolsByCity")]
+        public HttpResponseMessage GetSchoolsByCity(string city)
+        {
+            var response = new HttpResponseMessage();
+            List<SchoolsLayerViewModel> schools;
+            try
+            {
+                schools = _mapService.GetSchoolsByCity(city);
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.Content = new ObjectContent<string>(e.Message, new JsonMediaTypeFormatter());
+                return response;
+            }
+            response.StatusCode = HttpStatusCode.OK;
+            response.Content = new ObjectContent<List<SchoolsLayerViewModel>>(schools, new JsonMediaTypeFormatter());
+            return response;
+        }
+
+        [Route("GetPolutionPoints")]
+        public HttpResponseMessage GetPolutionPoints()
+        {
+            var response = new HttpResponseMessage();
+            List<PolutionLayerViewModel> polution;
+            try
+            {
+                polution = _mapService.GetPolutionPoints();
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.Content = new ObjectContent<string>(e.Message, new JsonMediaTypeFormatter());
+                return response;
+            }
+            response.StatusCode = HttpStatusCode.OK;
+            response.Content = new ObjectContent<List<PolutionLayerViewModel>>(polution, new JsonMediaTypeFormatter());
+            return response;
+        }
+
         [Route("GetCities")]
         public HttpResponseMessage GetCities()
         {

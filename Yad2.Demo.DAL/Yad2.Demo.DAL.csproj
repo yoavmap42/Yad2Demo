@@ -53,6 +53,9 @@
     <Compile Include="AddressMaster.cs">
       <DependentUpon>Yad2Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="AirQualityStations.cs">
+      <DependentUpon>Yad2Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Areas.cs">
       <DependentUpon>Yad2Model.tt</DependentUpon>
     </Compile>

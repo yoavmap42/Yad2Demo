@@ -39,4 +39,14 @@ namespace Yad2.Demo.UI.Models
         public bool? IsAgency { get; set; }
         public bool? IsNew { get; set; }
     }
+
+    public class SchoolsLayerViewModel : BaseLayerViewModel
+    {
+        public int Rank { get; set; }
+    }
+
+    public class PolutionLayerViewModel : BaseLayerViewModel
+    {
+        public double Level { get; set; }
+    }
 }

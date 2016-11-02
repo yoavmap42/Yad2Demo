@@ -61,6 +61,21 @@ namespace Yad2.Demo.BL
             return _db.Listings.Count(x => x.ShchunaID == nid && x.IsSold == false);
         }
 
+        public IEnumerable<Schools> GetSchoolsByCity(string code)
+        {
+            return _db.Schools.Where(x => x.CityCode == code);
+        }
+
+        public IEnumerable<Schools> GetSchoolsByNeighborhood(int nid)
+        {
+            return _db.Schools.Where(x => x.ShchunaID == nid);
+        }
+
+        public IEnumerable<AirQualityStations> GetPolutionPoints()
+        {
+            return _db.AirQualityStations;
+        }
+
         public MapManager()
         {
             _db = new Yad2Entities();
